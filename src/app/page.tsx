@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Shield, FileText, BarChart3, Users } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import EnhancedMapView from "@/components/MapView";
+import FraudDetectionDemo from "@/components/FraudDetectionDemo";
 
 export default function HomePage() {
   return (
@@ -42,19 +43,9 @@ export default function HomePage() {
               Our AI analyzes millions of claims in real time to identify suspicious patterns, anomalies, and fraudulent schemes before they result in payouts.
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="aspect-video bg-gradient-to-br from-red-50 to-orange-100 flex items-center justify-center">
-              <div className="text-center">
-                <div className="bg-gray-200 border-2 border-dashed rounded-xl w-32 h-32 mx-auto mb-6" />
-                  <p className="text-xl font-medium text-gray-700">
-                    Live Demo Coming Soon
-                  </p>
-                  <p className="mt-2 text-gray-500">
-                    Real-time fraud detection dashboard
-                  </p>
-                </div>
-              </div>
-            </div>
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <FraudDetectionDemo />
+          </div>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
               <p className="text-4xl font-bold text-black">95%+</p>
