@@ -17,8 +17,8 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="mt-8 text-xl text-gray-600 max-w-3xl mx-auto">
-            Custom plans built for your claims volume, lines of business, and goals. 
-            No hidden fees. Pay only for the value you get.
+            Custom plans built for your claims volume and fraud detection needs. 
+            No hidden fees. Pay only for the fraud we help you prevent.
           </p>
         </div>
       </section>
@@ -27,10 +27,10 @@ export default function PricingPage() {
       <section className="py-20 px-6 bg-white">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-            Enterprise-Grade AI. Enterprise-Grade Pricing.
+            Fraud Detection That Pays For Itself
           </h2>
           <p className="mt-6 text-lg text-gray-600 max-w-3xl mx-auto">
-            Our solutions are tailored to mid-market and enterprise insurers. Pricing is based on:
+            Our fraud detection platform is tailored to mid-market and enterprise health insurers. Pricing is based on:
           </p>
 
           <div className="mt-16 grid md:grid-cols-3 gap-10 max-w-5xl mx-auto">
@@ -48,9 +48,9 @@ export default function PricingPage() {
               <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Zap className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Platforms Used</h3>
+              <h3 className="text-xl font-semibold text-gray-900">Fraud Types Covered</h3>
               <p className="mt-4 text-gray-600">
-                Fraud Elimination, Instant Claims, or both (bundled discount available).
+                Phantom billing, upcoding, unbundling, duplicate claims, and organized fraud detection.
               </p>
             </div>
 
@@ -74,8 +74,8 @@ export default function PricingPage() {
             Get Your Custom Quote
           </h2>
           <p className="mt-6 text-xl text-gray-600">
-            Most customers see ROI within the first 3–6 months through fraud savings 
-            and operational efficiency.
+            Most customers see ROI within the first 3–6 months through prevented fraudulent payouts alone. 
+            Average savings exceed $50M annually.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">

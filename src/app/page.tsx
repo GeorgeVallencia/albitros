@@ -10,10 +10,10 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center text-center py-24 px-6 bg-gray-50">
         <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-gray-900">
-          Save Millions on Fraud.<br />Pay Claims in Minutes.
+          Stop Healthcare Fraud<br />Before It Costs You Millions.
         </h1>
         <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-3xl">
-          Two powerful AI platforms that help health insurers stop billions in fraudulent payouts while dramatically speeding up legitimate claims - reducing costs and improving trust.
+          AI-powered fraud detection that catches phantom billing, upcoding, unbundling, and organized fraud rings before payout - saving health insurers millions while maintaining compliance.
         </p>
           {/* <EnhancedMapView /> */}
         <div className="mt-8 flex gap-4">
@@ -36,21 +36,21 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900">
-              See Fraud Patterns and Instant Decisions in Action
+              See Fraud Patterns Detected in Real Time
             </h2>
             <p className="mt-4 text-lg text-gray-600">
-              Our AI analyzes millions of claims in real time to flag suspicious patterns and auto-approve clean claims for immediate payout.
+              Our AI analyzes millions of claims in real time to identify suspicious patterns, anomalies, and fraudulent schemes before they result in payouts.
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="aspect-video bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+            <div className="aspect-video bg-gradient-to-br from-red-50 to-orange-100 flex items-center justify-center">
               <div className="text-center">
                 <div className="bg-gray-200 border-2 border-dashed rounded-xl w-32 h-32 mx-auto mb-6" />
                   <p className="text-xl font-medium text-gray-700">
                     Live Demo Coming Soon
                   </p>
                   <p className="mt-2 text-gray-500">
-                    Real-time fraud detection + instant claim approval dashboard
+                    Real-time fraud detection dashboard
                   </p>
                 </div>
               </div>
@@ -61,12 +61,12 @@ export default function HomePage() {
               <p className="mt-2 text-gray-600">Fraud Detection Accuracy</p>
             </div>
             <div>
-              <p className="text-4xl font-bold text-black">80%+</p>
-              <p className="mt-2 text-gray-600">Claims Auto-Approved Instantly</p>
+              <p className="text-4xl font-bold text-black">$50M+</p>
+              <p className="mt-2 text-gray-600">Average Annual Savings</p>
             </div>
             <div>
-              <p className="text-4xl font-bold text-black">&lt;24h</p>
-              <p className="mt-2 text-gray-600">Average Payout Time for Valid Claims</p>
+              <p className="text-4xl font-bold text-black">&lt;1s</p>
+              <p className="mt-2 text-gray-600">Real-Time Fraud Flagging</p>
             </div>
           </div>
           </div>
@@ -76,54 +76,36 @@ export default function HomePage() {
       <section id='features' className="py-24 px-6 bg-white">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-gray-900">
-            Two AI Platforms Transforming Health Insurance Claims
+            Comprehensive Healthcare Fraud Detection
           </h2>
           <p className="mt-4 text-lg text-gray-600">
-            Stop fraud at the source and pay legitimate claims faster than ever - all with explainable, auditable AI designed for insurers.
+            Detect and prevent all types of healthcare fraud with explainable, auditable AI designed specifically for health insurers.
           </p>
         </div>
 
         <div className="mt-16 grid gap-10 md:grid-cols-3 max-w-6xl mx-auto">
           <div className="p-8 border rounded-2xl shadow-sm hover:shadow-md transition">
-            <Shield className="w-10 h-10 text-black" />
-            <h3 className="mt-6 text-xl text-black font-semibold">Fraud Elimination Platform</h3>
+            <Shield className="w-10 h-10 text-red-600" />
+            <h3 className="mt-6 text-xl text-black font-semibold">Phantom Billing Detection</h3>
             <p className="mt-2 text-gray-600">
-              Real-time detection of phantom billing, upcoding, unbundling, duplicate claims, and organized fraud rings. Catch fraud before payout with 95%+ accuracy and full audit trails.
+              Identify claims for services never rendered, procedures that never happened, and ghost patients. Our AI cross-references provider records, patient histories, and treatment patterns to catch phantom billing schemes.
             </p>
-            <Link
-              href="/fraud-detection"
-              className="mt-6 inline-block text-black font-medium hover:underline"
-            >
-              Learn more →
-            </Link>
           </div>
 
           <div className="p-8 border rounded-2xl shadow-sm hover:shadow-md transition">
-            <FileText className="w-10 h-10 text-black" />
-            <h3 className="mt-6 text-xl text-black font-semibold">Instant Claims Platform</h3>
+            <FileText className="w-10 h-10 text-orange-600" />
+            <h3 className="mt-6 text-xl text-black font-semibold">Upcoding & Unbundling</h3>
             <p className="mt-2 text-gray-600">
-               Automate adjudication for clean claims and enable same-day or instant payouts. Reduce processing time from weeks to minutes while maintaining compliance and accuracy.
+              Detect inflated billing codes, procedures billed at higher reimbursement rates than justified, and services improperly separated to maximize payments. Stop revenue leakage before payout.
             </p>
-            <Link
-              href="/instant-claims"
-              className="mt-6 inline-block text-black font-medium hover:underline"
-            >
-              Learn more →
-            </Link>
           </div>
 
           <div className="p-8 border rounded-2xl shadow-sm hover:shadow-md transition">
-            <BarChart3 className="w-10 h-10 text-black" />
-            <h3 className="mt-6 text-xl text-black font-semibold">Better Outcomes For Everyone</h3>
+            <BarChart3 className="w-10 h-10 text-purple-600" />
+            <h3 className="mt-6 text-xl text-black font-semibold">Organized Fraud Rings</h3>
             <p className="mt-2 text-gray-600">
-              Reduce losses, lower premiums, speed up care delivery, and rebuild trust with providers and policyholders.
+              Uncover coordinated fraud schemes across multiple providers, facilities, and patients. Our network analysis identifies suspicious patterns and connections that manual review would miss.
             </p>
-            <Link
-              href="/delighted-customers"
-              className="mt-6 inline-block text-black font-medium hover:underline"
-            >
-              Learn more →
-            </Link>
           </div>
         </div>
       </section>
@@ -131,10 +113,10 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-24 px-6 bg-gray-900 text-white text-center">
         <h2 className="text-3xl md:text-4xl font-bold">
-          Ready to Eliminate Fraud and Pay Claims Faster?
+          Ready to Stop Healthcare Fraud?
         </h2>
         <p className="mt-4 text-lg text-gray-300">
-          Join leading health insurers transforming claims processing with AI.
+          Join leading health insurers protecting their bottom line with AI-powered fraud detection.
         </p>
         <div className="mt-8 flex justify-center">
           <Link

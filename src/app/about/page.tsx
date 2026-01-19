@@ -11,11 +11,11 @@ export default function AboutPage() {
       <section className="py-20 px-6 bg-gray-50 text-center">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-gray-900">
-            Transforming Insurance with AI
+            Stopping Healthcare Fraud with AI
           </h1>
           <p className="mt-8 text-xl text-gray-600 max-w-3xl mx-auto">
-            We build advanced AI platforms that detect and prevent fraud across all lines of insurance 
-            while enabling legitimate claims to be paid in minutes — not weeks or months.
+            We build advanced AI platforms that detect and prevent healthcare fraud including phantom billing, 
+            upcoding, unbundling, and organized fraud schemes — protecting insurers from billions in fraudulent payouts.
           </p>
         </div>
       </section>
@@ -27,9 +27,9 @@ export default function AboutPage() {
             <HeartHandshake className="w-12 h-12 text-black mb-6" />
             <h2 className="text-3xl font-bold text-gray-900">Our Mission</h2>
             <p className="mt-6 text-lg text-gray-600 leading-relaxed">
-              To stop billions in fraudulent payouts across property & casualty, auto, workers' comp, 
-              life, and other insurance lines — while ensuring valid claims are processed and paid faster 
-              than ever. We make insurance more efficient, fair, and trustworthy for everyone.
+              To eliminate healthcare fraud that costs the industry billions annually. We detect phantom billing, 
+              upcoding, unbundling, duplicate claims, and organized fraud rings before they result in payouts — 
+              making healthcare more efficient, fair, and trustworthy for everyone.
             </p>
           </div>
 
@@ -37,8 +37,8 @@ export default function AboutPage() {
             <Zap className="w-12 h-12 text-black mb-6" />
             <h2 className="text-3xl font-bold text-gray-900">Our Vision</h2>
             <p className="mt-6 text-lg text-gray-600 leading-relaxed">
-              An insurance industry with near-zero fraud losses and instant payouts for legitimate claims — 
-              reducing costs, lowering premiums, and delivering better outcomes for policyholders and insurers alike.
+              A healthcare system with near-zero fraud losses where every dollar goes to legitimate care — 
+              reducing costs, lowering premiums, and delivering better outcomes for patients and insurers alike.
             </p>
           </div>
         </div>
@@ -48,63 +48,89 @@ export default function AboutPage() {
       <section className="py-20 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-gray-900">
-            Two Platforms. One Goal: Smarter, Fraud-Free Insurance.
+            How Our AI Detects Healthcare Fraud
           </h2>
           <p className="mt-6 text-lg text-gray-600 max-w-3xl mx-auto">
-            Our AI solutions work independently or together to tackle fraud and slow payouts 
-            across auto, property, workers' comp, liability, and beyond.
+            Our platform uses advanced machine learning to identify fraudulent patterns across all types of healthcare fraud, 
+            with industry-leading accuracy and full audit trails.
           </p>
         </div>
 
-        <div className="mt-16 grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          {/* Fraud Elimination */}
+        <div className="mt-16 grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {/* Phantom Billing */}
           <div className="bg-white p-10 rounded-2xl shadow-md hover:shadow-xl transition">
             <Shield className="w-14 h-14 text-red-600 mx-auto mb-8" />
             <h3 className="text-2xl font-semibold text-gray-900">
-              Fraud Elimination Platform
+              Phantom Billing
             </h3>
             <p className="mt-6 text-gray-600 leading-relaxed">
-              Real-time detection of inflated claims, staged accidents, premium leakage, upcoding, 
-              phantom billing, and organized fraud rings — with industry-leading accuracy and full audit trails.
+              Detects claims for services never rendered, procedures that didn't happen, and ghost patients. 
+              Cross-references provider records, patient histories, and treatment patterns.
             </p>
             <ul className="mt-8 space-y-4 text-left text-gray-600">
               <li className="flex items-start gap-3">
                 <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
-                <span>Catches fraud before payout across all insurance lines</span>
+                <span>Identifies fake patient records</span>
               </li>
               <li className="flex items-start gap-3">
                 <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
-                <span>Reduces false positives with explainable AI</span>
+                <span>Verifies service delivery</span>
               </li>
               <li className="flex items-start gap-3">
                 <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
-                <span>Seamlessly integrates with existing claims systems</span>
+                <span>Catches billing for no-shows</span>
               </li>
             </ul>
           </div>
 
-          {/* Instant Claims */}
+          {/* Upcoding & Unbundling */}
           <div className="bg-white p-10 rounded-2xl shadow-md hover:shadow-xl transition">
-            <Zap className="w-14 h-14 text-green-600 mx-auto mb-8" />
+            <FileText className="w-14 h-14 text-orange-600 mx-auto mb-8" />
             <h3 className="text-2xl font-semibold text-gray-900">
-              Instant Claims Platform
+              Upcoding & Unbundling
             </h3>
             <p className="mt-6 text-gray-600 leading-relaxed">
-              Automates adjudication of straightforward claims and enables same-day or instant payouts — 
-              turning weeks of manual review into minutes, while maintaining compliance.
+              Identifies inflated billing codes and services improperly separated to maximize reimbursement. 
+              Compares against treatment standards and proper coding practices.
             </p>
             <ul className="mt-8 space-y-4 text-left text-gray-600">
               <li className="flex items-start gap-3">
                 <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
-                <span>Auto-approves 80%+ of clean claims instantly</span>
+                <span>Flags inflated procedure codes</span>
               </li>
               <li className="flex items-start gap-3">
                 <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
-                <span>Full compliance and audit trails</span>
+                <span>Detects improper unbundling</span>
               </li>
               <li className="flex items-start gap-3">
                 <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
-                <span>Boosts policyholder and provider satisfaction</span>
+                <span>Validates code justification</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Fraud Rings */}
+          <div className="bg-white p-10 rounded-2xl shadow-md hover:shadow-xl transition">
+            <Users className="w-14 h-14 text-purple-600 mx-auto mb-8" />
+            <h3 className="text-2xl font-semibold text-gray-900">
+              Organized Fraud Rings
+            </h3>
+            <p className="mt-6 text-gray-600 leading-relaxed">
+              Uncovers coordinated schemes across providers, facilities, and patients. 
+              Network analysis identifies suspicious connections manual review would miss.
+            </p>
+            <ul className="mt-8 space-y-4 text-left text-gray-600">
+              <li className="flex items-start gap-3">
+                <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+                <span>Maps provider networks</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+                <span>Identifies coordinated patterns</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+                <span>Tracks suspicious referrals</span>
               </li>
             </ul>
           </div>
@@ -114,12 +140,12 @@ export default function AboutPage() {
       {/* Team / Values */}
       <section className="py-20 px-6 bg-white text-center">
         <div className="max-w-4xl mx-auto">
-          <Users className="w-12 h-12 text-black mx-auto mb-8" />
-          <h2 className="text-4xl font-bold text-gray-900">Built by Experts in AI & Insurance</h2>
+          <Shield className="w-12 h-12 text-black mx-auto mb-8" />
+          <h2 className="text-4xl font-bold text-gray-900">Built by Experts in AI & Healthcare</h2>
           <p className="mt-6 text-lg text-gray-600 max-w-3xl mx-auto">
-            Our team brings decades of experience in claims processing, fraud investigation, 
-            and cutting-edge machine learning across multiple insurance lines. 
-            We're driven by technology that makes insurance fairer, faster, and more resilient.
+            Our team brings decades of experience in healthcare claims processing, fraud investigation, 
+            and cutting-edge machine learning. We're driven by technology that makes healthcare 
+            more efficient, fair, and protects billions in fraudulent losses.
           </p>
         </div>
       </section>
@@ -127,10 +153,10 @@ export default function AboutPage() {
       {/* CTA */}
       <section className="py-20 px-6 bg-gray-900 text-white text-center">
         <h2 className="text-4xl font-bold">
-          Ready to Stop Fraud and Pay Claims Instantly?
+          Ready to Stop Healthcare Fraud?
         </h2>
         <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto">
-          Let’s discuss how our AI platforms can transform your operations.
+          Let's discuss how our AI platform can protect your organization from fraudulent claims.
         </p>
         <div className="mt-10">
           <Link
