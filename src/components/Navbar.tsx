@@ -19,44 +19,50 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-10">
           <Link 
-            href="/#features" 
+            href="/#problem" 
             className="text-sm font-medium text-gray-700 hover:text-black transition"
           >
-            Features
+            Problem
           </Link>
           <Link 
-            href="/pricing"
+            href="/#why"
             className="text-sm font-medium text-gray-700 hover:text-black transition"
           >
-            Pricing
+            Why Albitros
           </Link>
           <Link 
-            href="/about" 
+            href="/how-it-works" 
             className="text-sm font-medium text-gray-700 hover:text-black transition"
           >
-            About
+            How It Works
           </Link>
           <Link 
-            href="/contact" 
+            href="/#case-studies" 
             className="text-sm font-medium text-gray-700 hover:text-black transition"
           >
-            Contact
+            Results
+          </Link>
+          <Link 
+            href="/faq" 
+            className="text-sm font-medium text-gray-700 hover:text-black transition"
+          >
+            FAQ
           </Link>
         </div>
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center space-x-4">
           <Link 
-            href="/login" 
+            href="/roi" 
             className="text-sm font-medium text-gray-700 hover:text-black transition"
           >
-            Log in
+            ROI Calculator
           </Link>
           <Link
-            href="/contact"  // Or use your Calendly link directly if preferred
+            href="/contact"
             className="px-5 py-2.5 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-900 transition"
           >
-            Request Demo
+            Schedule a Demo
           </Link>
         </div>
 
@@ -74,48 +80,55 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 px-6 py-6 space-y-5">
           <Link 
-            href="/#features" 
+            href="/#problem" 
             className="block text-base font-medium text-gray-700 hover:text-black"
             onClick={() => setMobileOpen(false)}
           >
-            Features
+            Problem
           </Link>
           <Link 
-            href="/pricing"
+            href="/#why"
             className="block text-base font-medium text-gray-700 hover:text-black"
             onClick={() => setMobileOpen(false)}
           >
-            Pricing
+            Why Albitros
           </Link>
           <Link 
-            href="/about" 
+            href="/how-it-works" 
             className="block text-base font-medium text-gray-700 hover:text-black"
             onClick={() => setMobileOpen(false)}
           >
-            About
+            How It Works
           </Link>
           <Link 
-            href="/contact" 
+            href="/#case-studies" 
             className="block text-base font-medium text-gray-700 hover:text-black"
             onClick={() => setMobileOpen(false)}
           >
-            Contact
+            Results
+          </Link>
+          <Link 
+            href="/faq" 
+            className="block text-base font-medium text-gray-700 hover:text-black"
+            onClick={() => setMobileOpen(false)}
+          >
+            FAQ
           </Link>
 
           <div className="pt-4 border-t border-gray-200 space-y-4">
             <Link 
-              href="/login" 
+              href="/roi" 
               className="block text-base font-medium text-gray-700 hover:text-black"
               onClick={() => setMobileOpen(false)}
             >
-              Log in
+              ROI Calculator
             </Link>
             <Link
-              href="/contact"  // Or your Calendly link
+              href="/contact"
               className="block w-full text-center px-5 py-3 bg-black text-white text-base font-medium rounded-lg hover:bg-gray-900 transition"
               onClick={() => setMobileOpen(false)}
             >
-              Request Demo
+              Schedule a Demo
             </Link>
           </div>
         </div>
