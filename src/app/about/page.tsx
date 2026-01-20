@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Shield, Lock, Award, Users, Cpu, ClipboardList, BookOpen, ShieldCheck } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { FileText } from "lucide-react";
 
 const team = [
   {
