@@ -45,20 +45,32 @@ model Company {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  passwordHash String
-  fullName     String
-  role         UserRole @default(MEMBER)
+  id                   String    @id @default(cuid())
+  email                String    @unique
+  passwordHash         String
+  fullName             String
+  username             String?   // Added username
+  role                 UserRole  @default(MEMBER)
+  emailVerified        Boolean   @default(false)
+  emailVerificationToken String?
+  emailVerificationExpires DateTime?
+  passwordResetToken   String?
+  passwordResetExpires  DateTime?
+  isLocked             Boolean   @default(false)
+  lockedUntil          DateTime?
+  mfaEnabled           Boolean   @default(false)
+  mfaSecret            String?
+  backupCodes          String[]  // JSON array of backup codes
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
-  companyId String
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId            String
+  company              Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
-  sentInvitations Invitation[] @relation("SentInvitations") // ← Added opposite side
-  auditLogs       AuditLog[]
+  sentInvitations      Invitation[] @relation("SentInvitations")
+  auditLogs            AuditLog[]
+  authAttempts         AuthAttempt[]
 
   @@map("users")
 }
@@ -83,7 +95,10 @@ model Invitation {
 model AuditLog {
   id        String   @id @default(cuid())
   action    String
-  details   Json?
+  resource  String?  // Added resource field
+  details   Json?    // Renamed from metadata
+  ipAddress String?   // Added IP address
+  userAgent String?   // Added user agent
   userId    String?
   companyId String?
   createdAt DateTime @default(now())
@@ -92,4 +107,19 @@ model AuditLog {
   company Company? @relation(fields: [companyId], references: [id])
 
   @@map("audit_logs")
+}
+
+model AuthAttempt {
+  id        String   @id @default(cuid())
+  email     String
+  userId    String?
+  success   Boolean
+  reason    String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("auth_attempts")
 }
