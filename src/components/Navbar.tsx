@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import logo from '../media/logo.jpg';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -14,8 +15,7 @@ export default function Navbar() {
         
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <Image src="/logo.svg" alt="Albitros" width={32} height={32} priority />
-          <span className="text-2xl font-bold tracking-tight text-black">Albitros</span>
+          <Image src={logo} alt="Albitros" width={120} height={32} priority />
         </Link>
 
         {/* Desktop Navigation */}
