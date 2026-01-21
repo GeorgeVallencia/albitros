@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Shield, FileText, BarChart3, Users, Lock, CheckCircle2, Sparkles, Workflow, LineChart, BadgeCheck, Zap, ClipboardCheck, Building2, HeartPulse, AlertTriangle, Clock, ArrowRight, ShieldCheck, Award } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import EnhancedMapView from "@/components/MapView";
-import FraudDetectionDemo from "@/components/FraudDetectionDemo";
+import AdvancedFraudDetectionDemo from "@/components/AdvancedFraudDetectionDemo";
 
 export default function HomePage() {
   return (
@@ -179,9 +179,9 @@ export default function HomePage() {
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-6 border">
-            <FraudDetectionDemo />
+            <AdvancedFraudDetectionDemo />
           </div>
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
               <p className="text-4xl font-bold text-black">95%+</p>
               <p className="mt-2 text-gray-600">precision on prioritized fraud queues</p>
@@ -195,7 +195,7 @@ export default function HomePage() {
               <p className="mt-2 text-gray-600">decision latency for inline claim checks</p>
             </div>
           </div>
-          </div>
+        </div>
       </section>
 
       {/* Fraud Scenarios */}
