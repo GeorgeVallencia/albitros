@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
-import logo from '../media/logo.jpg';
 import Image from 'next/image';
 
 export default function Navbar() {
@@ -11,11 +10,12 @@ export default function Navbar() {
 
   return (
     <nav className="w-full bg-white fixed top-0 z-50 border-b border-gray-100">
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-32">
+      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
         
         {/* Logo */}
-        <Link href="/" className="relative h-32 auto">
-          <Image src={logo} alt="Albitros" width={120} height={40} priority className='h-full w-auto object-contain' />
+        <Link href="/" className="flex items-center gap-3">
+          <Image src="/logo.svg" alt="Albitros" width={32} height={32} priority />
+          <span className="text-2xl font-bold tracking-tight text-black">Albitros</span>
         </Link>
 
         {/* Desktop Navigation */}

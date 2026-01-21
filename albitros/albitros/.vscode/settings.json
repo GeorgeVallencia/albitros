@@ -1,0 +1,11 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/.env": false,
+    "**/.env.local": false,
+    "**/.env.production": false,
+    "**/.env.development": false
+  }
+}
