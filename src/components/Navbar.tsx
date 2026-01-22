@@ -15,7 +15,14 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <Image src={logo} alt="Albitros" width={120} height={32} priority />
+          <Image
+            src={logo}
+            alt="Albitros"
+            width={120}
+            height={32}
+            priority
+            style={{ width: 'auto', height: 'auto' }}
+          />
         </Link>
 
         {/* Desktop Navigation */}

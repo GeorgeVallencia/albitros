@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from '@/lib/auth';
+import { UserRole } from '@prisma/client';
 
 interface Permission {
   resource: string;
@@ -292,7 +293,7 @@ export class RBAC {
   /**
    * Get role by name
    */
-  static getRole(roleName: string): Role | undefined {
+  static getRole(roleName: UserRole): Role | undefined {
     return RBAC_ROLES[roleName];
   }
 }

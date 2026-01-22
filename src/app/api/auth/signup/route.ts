@@ -1,46 +1,30 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import {
-  signupBaseSchema,
-  signupUnderwriterSchema,
-  signupBrokerSchema,
-  signupInsurerSchema,
-  signupClaimsSchema,
-  signupReinsurerSchema,
-} from "@/lib/validation";
+import { signupBaseSchema } from "@/lib/validation";
 import { createJWT, setSessionCookie } from "@/lib/auth";
-import { Role } from "@prisma/client";
+import { UserRole } from "@prisma/client";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const role = body?.role as Role;
+    // Validate request body structure
+    if (!body || typeof body !== 'object') {
+      return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    }
+
+    const role = body?.role as UserRole;
     if (!role) {
       return NextResponse.json({ error: "Role required" }, { status: 400 });
     }
 
-    // Pick correct schema
-    let parsed: any;
-    switch (role) {
-      case "UNDERWRITER":
-        parsed = signupUnderwriterSchema.parse(body);
-        break;
-      case "BROKER":
-        parsed = signupBrokerSchema.parse(body);
-        break;
-      case "INSURER":
-        parsed = signupInsurerSchema.parse(body);
-        break;
-      case "CLAIMS":
-        parsed = signupClaimsSchema.parse(body);
-        break;
-      case "REINSURER":
-        parsed = signupReinsurerSchema.parse(body);
-        break;
-      default:
-        parsed = signupBaseSchema.parse(body);
+    // Validate with base schema
+    const parsed = signupBaseSchema.parse(body);
+
+    // Validate role is one of the allowed UserRole values
+    if (!["ADMIN", "MEMBER", "VIEWER"].includes(parsed.role)) {
+      return NextResponse.json({ error: "Invalid role. Must be ADMIN, MEMBER, or VIEWER" }, { status: 400 });
     }
 
     // Ensure unique email + username
@@ -50,10 +34,10 @@ export async function POST(req: Request) {
     ]);
 
     if (existingEmail) {
-      return NextResponse.json({ error: "Email already in use" }, { status: 400 });
+      return NextResponse.json({ error: "Email already in use" }, { status: 409 });
     }
     if (existingUsername) {
-      return NextResponse.json({ error: "Username already in use" }, { status: 400 });
+      return NextResponse.json({ error: "Username already in use" }, { status: 409 });
     }
 
     // Hash password
@@ -67,12 +51,7 @@ export async function POST(req: Request) {
         passwordHash,
         fullName: parsed.fullName,
         role: parsed.role,
-        organization: parsed.organization ?? null,
-        industry: parsed.industry ?? null,
-        specialtyLine: parsed.specialtyLine ?? null,
-        yearsExp: parsed.yearsExp ?? null,
-        avgClaimsPerMonth: parsed.avgClaimsPerMonth ?? null,
-        reinsurerType: parsed.reinsurerType ?? null,
+        companyId: "default-company-id", // TODO: Handle company assignment properly
       },
       select: {
         id: true,
@@ -91,12 +70,59 @@ export async function POST(req: Request) {
     });
     await setSessionCookie(token);
 
-    return NextResponse.json({ user });
+    return NextResponse.json({
+      success: true,
+      user,
+      message: "User created successfully"
+    }, { status: 201 });
+
   } catch (err: any) {
-    console.error("Signup error:", err);
-    if (err?.issues) {
-      return NextResponse.json({ error: err.issues[0].message }, { status: 400 });
+    console.error("Signup error:", {
+      error: err.message,
+      stack: err.stack,
+      timestamp: new Date().toISOString()
+    });
+
+    // Handle Zod validation errors
+    if (err?.issues && Array.isArray(err.issues)) {
+      const validationError = err.issues[0];
+      return NextResponse.json({
+        error: `Validation failed: ${validationError.message}`,
+        field: validationError.path?.[0]
+      }, { status: 400 });
     }
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+
+    // Handle Prisma unique constraint errors
+    if (err?.code === 'P2002') {
+      const target = err?.meta?.target;
+      if (target?.includes('email')) {
+        return NextResponse.json({ error: "Email already exists" }, { status: 409 });
+      }
+      if (target?.includes('username')) {
+        return NextResponse.json({ error: "Username already exists" }, { status: 409 });
+      }
+      return NextResponse.json({ error: "Resource already exists" }, { status: 409 });
+    }
+
+    // Handle Prisma foreign key constraint errors
+    if (err?.code === 'P2003') {
+      return NextResponse.json({ error: "Invalid company reference" }, { status: 400 });
+    }
+
+    // Handle JSON parsing errors
+    if (err instanceof SyntaxError && 'body' in err) {
+      return NextResponse.json({ error: "Invalid JSON in request body" }, { status: 400 });
+    }
+
+    // Handle bcrypt errors
+    if (err?.message?.includes('bcrypt')) {
+      return NextResponse.json({ error: "Password processing failed" }, { status: 500 });
+    }
+
+    // Generic error for unexpected issues
+    return NextResponse.json({
+      error: "Internal server error",
+      requestId: crypto.randomUUID()
+    }, { status: 500 });
   }
 }

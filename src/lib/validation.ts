@@ -16,11 +16,9 @@ export const usernameSchema = z
   .regex(/^[a-zA-Z0-9._-]+$/, "Only letters, numbers, dot, underscore, hyphen");
 
 export const roleSchema = z.enum([
-  "UNDERWRITER",
-  "BROKER",
-  "INSURER",
-  "CLAIMS",
-  "REINSURER",
+  "ADMIN",
+  "MEMBER",
+  "VIEWER",
 ]);
 
 export const signupBaseSchema = z.object({
@@ -57,7 +55,7 @@ export const signupReinsurerSchema = signupBaseSchema.extend({
     .transform((val) => val.toLowerCase())
     .refine((val) => ["treaty", "facultative"].includes(val), {
       message: "Invalid reinsurer type",
-    }),    
+    }),
 });
 
 export const loginSchema = z.object({

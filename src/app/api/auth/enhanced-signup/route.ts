@@ -64,6 +64,7 @@ export const POST = withRateLimit(generalRateLimit)(async (req: NextRequest) => 
         fullName: validatedData.fullName,
         username: validatedData.email.split('@')[0], // Generate username from email
         companyId: company.id,
+        role: 'MEMBER', // Default role for new users
         emailVerificationToken: verificationToken,
         emailVerificationExpires: verificationExpires
       }
