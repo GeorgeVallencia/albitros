@@ -1,26 +1,37 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import Link from 'next/link';
 
 export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    fullName: "",
+    companyName: "",
+    companySize: "SMALL" as const,
+    claimsVolume: "UNDER_10K" as const,
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    const formData = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(formData.entries());
-
     try {
-      const res = await fetch("/api/auth/signup", {
+      const res = await fetch("/api/auth/enhanced-signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(payload),
+        body: JSON.stringify(form),
       });
 
       const data = await res.json();
@@ -31,10 +42,10 @@ export default function SignupPage() {
         return;
       }
 
-      // Success → redirect to dashboard or home
-      window.location.href = "/dashboard"; // or "/" if no dashboard yet
-    } catch (err) {
-      setError("Network error. Please check your connection.");
+      // Redirect to email verification page
+      window.location.href = "/verify-email?email=" + encodeURIComponent(form.email);
+    } catch (err: any) {
+      setError(err.message || "Signup failed. Please try again.");
       setLoading(false);
     }
   }
@@ -42,7 +53,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-5xl grid md:grid-cols-2 bg-white rounded-2xl shadow-2xl overflow-hidden">
-        
+
         {/* Left: Value Proposition */}
         <div className="bg-black text-white p-10 md:p-16 flex flex-col justify-center">
           <h1 className="text-4xl md:text-5xl font-bold leading-tight">
@@ -50,7 +61,7 @@ export default function SignupPage() {
             and Paying Claims Faster
           </h1>
           <p className="mt-8 text-lg text-gray-200">
-            Get early access to Albitross — the AI platform helping insurers 
+            Get early access to Albitros — the AI platform helping insurers
             detect fraud in real-time and automate instant payouts for valid claims.
           </p>
 
@@ -153,11 +164,12 @@ export default function SignupPage() {
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
-                  minLength={8}
-                  placeholder="Create a strong password"
-                  className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  value={form.password}
+                  onChange={handleChange}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-black focus:border-black sm:text-sm text-black"
+                  placeholder="•••••••••"
                 />
               </div>
 
