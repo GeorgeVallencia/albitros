@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { createJWT, setSessionCookie } from '@/lib/auth';
 import { generalRateLimit } from '@/lib/rate-limit';
 import { withRateLimit } from '@/lib/rate-limit';
 import { z } from 'zod';
-import { createJWT, setSessionCookie } from '@/lib/auth';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { sendEmail } from '@/lib/email';
@@ -74,6 +74,7 @@ export const POST = withRateLimit(generalRateLimit)(async (req: NextRequest) => 
 
     await sendEmail({
       to: user.email,
+      subject: 'Verify your Albitros account',
       template: 'email-verification',
       data: {
         username: user.fullName,
@@ -111,7 +112,7 @@ export const POST = withRateLimit(generalRateLimit)(async (req: NextRequest) => 
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid input', details: error.errors },
+        { error: 'Invalid input', details: error.issues },
         { status: 400 }
       );
     }
@@ -182,8 +183,7 @@ export const PUT = withRateLimit(generalRateLimit)(async (req: NextRequest) => {
         id: user.id,
         email: user.email,
         fullName: user.fullName,
-        emailVerified: true,
-        role: user.role
+        emailVerified: true
       }
     });
 
@@ -240,6 +240,7 @@ export const PATCH = withRateLimit(generalRateLimit)(async (req: NextRequest) =>
 
     await sendEmail({
       to: user.email,
+      subject: 'Verify your Albitros account',
       template: 'email-verification',
       data: {
         username: user.fullName,

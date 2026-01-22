@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { createJWT, setSessionCookie } from '@/lib/auth';
 import { authRateLimit } from '@/lib/rate-limit';
 import { withRateLimit } from '@/lib/rate-limit';
 import { z } from 'zod';
