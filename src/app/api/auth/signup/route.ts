@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
+import { UserRole } from "@prisma/client";
+import { signupBaseSchema } from "@/lib/validation";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { signupBaseSchema } from "@/lib/validation";
 import { createJWT, setSessionCookie } from "@/lib/auth";
-import { UserRole } from "@prisma/client";
 
 export async function POST(req: Request) {
   try {
@@ -27,17 +27,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid role. Must be ADMIN, MEMBER, or VIEWER" }, { status: 400 });
     }
 
-    // Ensure unique email + username
-    const [existingEmail, existingUsername] = await Promise.all([
-      prisma.user.findUnique({ where: { email: parsed.email } }),
-      prisma.user.findUnique({ where: { username: parsed.username } }),
-    ]);
+    // Ensure unique email
+    const existingEmail = await prisma.user.findUnique({
+      where: { email: parsed.email }
+    });
 
     if (existingEmail) {
       return NextResponse.json({ error: "Email already in use" }, { status: 409 });
-    }
-    if (existingUsername) {
-      return NextResponse.json({ error: "Username already in use" }, { status: 409 });
     }
 
     // Hash password
@@ -51,7 +47,7 @@ export async function POST(req: Request) {
         passwordHash,
         fullName: parsed.fullName,
         role: parsed.role,
-        companyId: "default-company-id", // TODO: Handle company assignment properly
+        companyId: "cmkp22c010000xl8khllyt6g6", // Default company ID
       },
       select: {
         id: true,
@@ -62,12 +58,13 @@ export async function POST(req: Request) {
       },
     });
 
-    // Create JWT + set cookie
+    // Create JWT and set session cookie
     const token = await createJWT({
       sub: user.id,
       email: user.email,
       role: user.role,
     });
+
     await setSessionCookie(token);
 
     return NextResponse.json({
@@ -98,9 +95,6 @@ export async function POST(req: Request) {
       if (target?.includes('email')) {
         return NextResponse.json({ error: "Email already exists" }, { status: 409 });
       }
-      if (target?.includes('username')) {
-        return NextResponse.json({ error: "Username already exists" }, { status: 409 });
-      }
       return NextResponse.json({ error: "Resource already exists" }, { status: 409 });
     }
 
@@ -119,10 +113,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Password processing failed" }, { status: 500 });
     }
 
+    // Handle Next.js cookies API errors
+    if (err?.message?.includes('cookies') || err?.message?.includes('Cookies')) {
+      return NextResponse.json({
+        error: "Session management failed",
+        details: "User may have been created but session could not be set"
+      }, { status: 500 });
+    }
+
     // Generic error for unexpected issues
     return NextResponse.json({
       error: "Internal server error",
-      requestId: crypto.randomUUID()
+      requestId: crypto.randomUUID(),
+      timestamp: new Date().toISOString()
     }, { status: 500 });
   }
 }

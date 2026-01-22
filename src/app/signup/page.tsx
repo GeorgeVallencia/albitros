@@ -106,7 +106,7 @@ export default function SignupPage() {
                   type="text"
                   required
                   placeholder="Jane Doe"
-                  className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  className="text-black mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
                 />
               </div>
 
@@ -120,7 +120,7 @@ export default function SignupPage() {
                   type="email"
                   required
                   placeholder="jane@insuranceco.com"
-                  className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  className="text-black mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
                 />
               </div>
 
@@ -134,7 +134,7 @@ export default function SignupPage() {
                   type="text"
                   required
                   placeholder="Acme Insurance"
-                  className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  className="text-black mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
                 />
               </div>
 
@@ -146,7 +146,7 @@ export default function SignupPage() {
                   id="claimsVolume"
                   name="claimsVolume"
                   required
-                  className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  className="text-black mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
                 >
                   <option value="">Select range</option>
                   <option value="<10k">Under 10,000</option>
@@ -168,7 +168,7 @@ export default function SignupPage() {
                   required
                   value={form.password}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-black focus:border-black sm:text-sm text-black"
+                  className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-black focus:border-black sm:text-sm text-black"
                   placeholder="•••••••••"
                 />
               </div>

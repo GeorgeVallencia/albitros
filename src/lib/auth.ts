@@ -1,7 +1,13 @@
 import { SignJWT, jwtVerify, JWTPayload } from "jose";
 import { cookies } from "next/headers";
 
-const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+const getJwtSecret = () => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error("JWT_SECRET environment variable is not set");
+  }
+  return new TextEncoder().encode(secret);
+};
 const COOKIE_NAME = "insurmap_session";
 
 type Session = {
@@ -15,11 +21,11 @@ export async function createJWT(session: Session) {
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("1d")
-    .sign(secret);
+    .sign(getJwtSecret());
 }
 
 export async function verifyJWT(token: string) {
-  const { payload } = await jwtVerify(token, secret);
+  const { payload } = await jwtVerify(token, getJwtSecret());
   return payload as Session;
 }
 
@@ -34,8 +40,8 @@ export async function setSessionCookie(token: string) {
   });
 }
 
-export function clearSessionCookie() {
-  const cookieStore = cookies();
+export async function clearSessionCookie() {
+  const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, "", {
     httpOnly: true,
     sameSite: "lax",
@@ -45,14 +51,14 @@ export function clearSessionCookie() {
   });
 }
 
-export function getSessionCookie() {
-  const cookieStore = cookies();
+export async function getSessionCookie() {
+  const cookieStore = await cookies();
   return cookieStore.get(COOKIE_NAME)?.value;
 }
 
 /** Server-side helper: get the session (or null) */
 export async function getServerSession() {
-  const token = getSessionCookie();
+  const token = await getSessionCookie();
   if (!token) return null;
   try {
     return await verifyJWT(token);
