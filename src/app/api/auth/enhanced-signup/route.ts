@@ -10,8 +10,15 @@ const enhancedSignupSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
   fullName: z.string().min(2),
-  username: z.string().min(3).max(32),
-  role: z.enum(['ADMIN', 'MEMBER', 'VIEWER'])
+  company: z.string().min(2),
+  companySize: z.enum(['SMALL', 'MEDIUM', 'LARGE']),
+  claimsVolume: z.enum([
+    'UNDER_10K',
+    'BETWEEN_10K_50K',
+    'BETWEEN_50K_100K',
+    'BETWEEN_100K_500K',
+    'OVER_500K'
+  ])
 });
 
 export async function POST(req: NextRequest) {
@@ -23,15 +30,14 @@ export async function POST(req: NextRequest) {
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
-          { email: validatedData.email },
-          { username: validatedData.username }
+          { email: validatedData.email }
         ]
       }
     });
 
     if (existingUser) {
       return NextResponse.json(
-        { error: 'An account with this email or username already exists' },
+        { error: 'An account with this email already exists' },
         { status: 409 }
       );
     }
@@ -39,14 +45,17 @@ export async function POST(req: NextRequest) {
     // Hash password
     const passwordHash = await bcrypt.hash(validatedData.password, 12);
 
+    // Generate username from email
+    const username = validatedData.email.split('@')[0];
+
     // Create user with default company
     const user = await prisma.user.create({
       data: {
         email: validatedData.email,
         passwordHash,
         fullName: validatedData.fullName,
-        username: validatedData.username,
-        role: validatedData.role,
+        username: username,
+        role: 'MEMBER', // Default role for new users
         companyId: "cmkp22c010000xl8khllyt6g6", // Default company ID
         emailVerified: false
       }
@@ -56,7 +65,8 @@ export async function POST(req: NextRequest) {
     const token = await createJWT({
       sub: user.id,
       email: user.email,
-      role: user.role
+      role: user.role,
+      fullName: user.fullName
     });
 
     const response = NextResponse.json({
@@ -71,10 +81,18 @@ export async function POST(req: NextRequest) {
       }
     });
 
-    setSessionCookie(token, response);
+    // Set session cookie on the response
+    response.cookies.set("insurmap_session", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24, // 1 day
+      path: "/",
+    });
+
     return response;
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Enhanced signup error:', error);
 
     if (error instanceof z.ZodError) {
@@ -86,7 +104,7 @@ export async function POST(req: NextRequest) {
 
     if (error?.code === 'P2002') {
       return NextResponse.json(
-        { error: 'An account with this email or username already exists' },
+        { error: 'An account with this email already exists' },
         { status: 409 }
       );
     }

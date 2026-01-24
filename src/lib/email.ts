@@ -9,12 +9,37 @@ interface EmailOptions {
   text?: string;
 }
 
-// Create transporter (configure with your email service)
-const createTransporter = () => {
+// Store ethereal account for reuse
+let etherealAccount: any = null;
+
+// Create transporter (auto-generates Ethereal account if needed)
+const createTransporter = async () => {
+  // If using Ethereal (development/testing)
+  if (process.env.SMTP_HOST === 'smtp.ethereal.email') {
+    if (!etherealAccount) {
+      etherealAccount = await nodemailer.createTestAccount();
+      console.log('📧 Ethereal Email Account Created:');
+      console.log('   Email:', etherealAccount.user);
+      console.log('   Password:', etherealAccount.pass);
+      console.log('   Preview URL: Check console after sending email');
+    }
+
+    return nodemailer.createTransport({
+      host: etherealAccount.smtp.host,
+      port: etherealAccount.smtp.port,
+      secure: etherealAccount.smtp.secure,
+      auth: {
+        user: etherealAccount.user,
+        pass: etherealAccount.pass,
+      },
+    });
+  }
+
+  // Production email service
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
     port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: false, // true for 465, false for other ports
+    secure: false,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
@@ -192,7 +217,7 @@ const templates = {
 
 export async function sendEmail(options: EmailOptions): Promise<void> {
   try {
-    const transporter = createTransporter();
+    const transporter = await createTransporter();
 
     let emailContent;
 
@@ -206,7 +231,7 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
       };
     }
 
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: process.env.FROM_EMAIL || 'noreply@albitros.com',
       to: options.to,
       subject: emailContent.subject,
@@ -214,9 +239,17 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
       text: emailContent.text,
     });
 
-    console.log(`Email sent successfully to ${options.to}`);
+    console.log(`✅ Email sent successfully to ${options.to}`);
+    console.log(`   Message ID: ${info.messageId}`);
+
+    // If using Ethereal, show preview URL
+    if (process.env.SMTP_HOST === 'smtp.ethereal.email') {
+      console.log(`📧 Email Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+      console.log(`📧 Open the URL above to view your email!`);
+    }
+
   } catch (error) {
-    console.error('Failed to send email:', error);
+    console.error('❌ Failed to send email:', error);
     throw new Error('Failed to send email');
   }
 }
@@ -224,7 +257,7 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
 // Test email configuration
 export async function testEmailConfig(): Promise<boolean> {
   try {
-    const transporter = createTransporter();
+    const transporter = await createTransporter();
     await transporter.verify();
     return true;
   } catch (error) {

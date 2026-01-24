@@ -43,11 +43,11 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="py-20 px-6 bg-gray-50 text-center">
         <div className="max-w-4xl mx-auto">
-          <p className="text-sm uppercase tracking-widest font-semibold text-black">About Albitros</p>
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-gray-900 mt-3">
+          <p className="text-xs uppercase tracking-widest font-semibold text-black">About Albitros</p>
+          <h1 className="text-xl font-bold tracking-tight text-gray-900 mt-3">
             Built by SIU leaders, clinicians, and ML engineers to stop fraud.
           </h1>
-          <p className="mt-6 text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xs text-gray-600 max-w-3xl mx-auto">
             We’ve lived the pain of rising loss ratios, slow investigations, and regulator scrutiny. Albitros combines payer-grade security, clinical context, and explainable AI to eliminate fraud while speeding clean payouts.
           </p>
         </div>
@@ -58,13 +58,13 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto grid lg:grid-cols-3 gap-10 items-start">
           <div className="p-6 border rounded-2xl shadow-sm bg-gray-50">
             <Shield className="w-8 h-8 text-black" />
-            <h3 className="mt-4 text-2xl font-semibold text-gray-900">Mission</h3>
-            <p className="mt-3 text-gray-700">Restore trust in healthcare payments by stopping fraud before payout and recovering dollars already lost.</p>
+            <h3 className="mt-4 text-xl font-semibold text-gray-900">Mission</h3>
+            <p className="text-xs text-gray-700">Restore trust in healthcare payments by stopping fraud before payout and recovering dollars already lost.</p>
           </div>
           <div className="p-6 border rounded-2xl shadow-sm bg-gray-50">
             <Award className="w-8 h-8 text-black" />
-            <h3 className="mt-4 text-2xl font-semibold text-gray-900">What we’ve done</h3>
-            <ul className="mt-3 space-y-2 text-gray-700">
+            <h3 className="mt-4 text-xl font-semibold text-gray-900">What we've done</h3>
+            <ul className="text-xs text-gray-700">
               <li>Recovered or prevented $100M+ across payer programs our team led.</li>
               <li>Delivered inline fraud checks with sub-second latency on millions of claims/day.</li>
               <li>Designed SIU workflows adopted by national and regional plans.</li>
@@ -72,8 +72,8 @@ export default function AboutPage() {
           </div>
           <div className="p-6 border rounded-2xl shadow-sm bg-gray-50">
             <Lock className="w-8 h-8 text-black" />
-            <h3 className="mt-4 text-2xl font-semibold text-gray-900">How we build</h3>
-            <ul className="mt-3 space-y-2 text-gray-700">
+            <h3 className="mt-4 text-xl font-semibold text-gray-900">How we build</h3>
+            <ul className="text-xs text-gray-700">
               <li>HIPAA-aligned data handling, encryption in transit/at rest.</li>
               <li>SOC 2 controls in progress with mapped policies and evidence.</li>
               <li>RBAC, SSO/SAML, audit logging, and PHI minimization by default.</li>
@@ -86,9 +86,9 @@ export default function AboutPage() {
       <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-3xl mx-auto">
-            <p className="text-sm uppercase tracking-widest font-semibold text-black">Team</p>
-            <h2 className="text-4xl font-bold text-gray-900 mt-2">Operators from payers, SIU, and ML</h2>
-            <p className="mt-4 text-lg text-gray-700">We blend clinical judgment, fraud investigation rigor, and production-grade ML.</p>
+            <p className="text-xs uppercase tracking-widest font-semibold text-black">Team</p>
+            <h2 className="text-xl font-bold text-gray-900 mt-2">Operators from payers, SIU, and ML</h2>
+            <p className="text-xs text-gray-700">We blend clinical judgment, fraud investigation rigor, and production-grade ML.</p>
           </div>
           <div className="mt-10 grid gap-8 md:grid-cols-2">
             {team.map((member) => (
@@ -96,12 +96,12 @@ export default function AboutPage() {
                 <div className="flex items-center gap-3">
                   <Users className="w-5 h-5 text-gray-700" />
                   <div>
-                    <p className="text-lg font-semibold text-gray-900">{member.name}</p>
-                    <p className="text-sm text-gray-600">{member.title}</p>
+                    <p className="text-xl font-semibold text-gray-900">{member.name}</p>
+                    <p className="text-xs text-gray-600">{member.title}</p>
                   </div>
                 </div>
-                <p className="mt-3 text-gray-700">{member.bio}</p>
-                <p className="mt-2 text-sm text-gray-500">{member.creds}</p>
+                <p className="text-xs text-gray-700">{member.bio}</p>
+                <p className="text-xs text-gray-500">{member.creds}</p>
               </div>
             ))}
           </div>
@@ -113,11 +113,11 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center gap-3">
             <BookOpen className="w-6 h-6 text-black" />
-            <h3 className="text-2xl font-bold text-gray-900">Advisors</h3>
+            <h3 className="text-xl font-bold text-gray-900">Advisors</h3>
           </div>
           <div className="mt-4 grid md:grid-cols-3 gap-4">
             {advisors.map((item) => (
-              <div key={item} className="p-4 border rounded-xl shadow-sm bg-gray-50 text-gray-800 text-sm">
+              <div key={item} className="p-4 border rounded-xl shadow-sm bg-gray-50 text-gray-800 text-xs">
                 {item}
               </div>
             ))}
@@ -129,10 +129,10 @@ export default function AboutPage() {
       <section className="py-16 px-6 bg-gray-900 text-white">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
           <div>
-            <p className="text-sm uppercase tracking-widest font-semibold text-gray-300">Trust & Compliance</p>
-            <h2 className="text-3xl md:text-4xl font-bold mt-3">Built for regulated healthcare environments.</h2>
-            <p className="mt-4 text-lg text-gray-200">Security, auditability, and PHI minimization are core design requirements—not add-ons.</p>
-            <ul className="mt-6 space-y-3 text-gray-200">
+            <p className="text-xs uppercase tracking-widest font-semibold text-gray-300">Trust & Compliance</p>
+            <h2 className="text-xl font-bold mt-3">Built for regulated healthcare environments.</h2>
+            <p className="text-xs text-gray-200">Security, auditability, and PHI minimization are core design requirements—not add-ons.</p>
+            <ul className="text-xs text-gray-200">
               <li className="flex items-start gap-3">
                 <ShieldCheck className="w-5 h-5 mt-1" />
                 <span>HIPAA-aligned controls and BAAs available.</span>
@@ -150,23 +150,23 @@ export default function AboutPage() {
           <div className="bg-white text-gray-900 rounded-2xl p-8 shadow-xl">
             <div className="grid grid-cols-2 gap-4">
               <div className="border rounded-xl p-4 text-center">
-                <p className="font-semibold">HIPAA</p>
-                <p className="text-sm text-gray-500 mt-1">Aligned controls</p>
+                <p className="font-semibold text-xl">HIPAA</p>
+                <p className="text-xs text-gray-500 mt-1">Aligned controls</p>
               </div>
               <div className="border rounded-xl p-4 text-center">
-                <p className="font-semibold">SOC 2</p>
-                <p className="text-sm text-gray-500 mt-1">In progress</p>
+                <p className="font-semibold text-xl">SOC 2</p>
+                <p className="text-xs text-gray-500 mt-1">In progress</p>
               </div>
               <div className="border rounded-xl p-4 text-center">
-                <p className="font-semibold">SSO / SAML</p>
-                <p className="text-sm text-gray-500 mt-1">Okta, Azure AD</p>
+                <p className="font-semibold text-xl">SSO / SAML</p>
+                <p className="text-xs text-gray-500 mt-1">Okta, Azure AD</p>
               </div>
               <div className="border rounded-xl p-4 text-center">
-                <p className="font-semibold">Audit Logs</p>
-                <p className="text-sm text-gray-500 mt-1">Exportable, immutable</p>
+                <p className="font-semibold text-xl">Audit Logs</p>
+                <p className="text-xs text-gray-500 mt-1">Exportable, immutable</p>
               </div>
             </div>
-            <div className="mt-6 bg-gray-50 border rounded-xl p-4 text-sm">
+            <div className="mt-6 bg-gray-50 border rounded-xl p-4 text-xs">
               <p className="font-semibold text-gray-900">Data handling</p>
               <p className="text-gray-600 mt-1">PHI minimization, role-scoped environments, least-privilege access, zero-retention options for sensitive payloads.</p>
             </div>
@@ -176,18 +176,18 @@ export default function AboutPage() {
 
       {/* CTA */}
       <section className="py-20 px-6 bg-white text-center">
-        <h2 className="text-4xl font-bold text-gray-900">Meet the team and see pilot results.</h2>
-        <p className="mt-4 text-lg text-gray-700">Schedule 30 minutes to review security, compliance, and how we’ll tune models with your historical outcomes.</p>
+        <h2 className="text-xl font-bold text-gray-900">Meet the team and see pilot results.</h2>
+        <p className="text-xs text-gray-700">Schedule 30 minutes to review security, compliance, and how we'll tune models with your historical outcomes.</p>
         <div className="mt-8 flex justify-center gap-4">
           <Link
             href="/contact"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition text-xs"
           >
             Schedule a demo
           </Link>
           <Link
             href="/how-it-works"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl border border-gray-300 text-gray-900 font-semibold hover:bg-gray-100 transition"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl border border-gray-300 text-gray-900 font-semibold hover:bg-gray-100 transition text-xs"
           >
             See how we work
           </Link>

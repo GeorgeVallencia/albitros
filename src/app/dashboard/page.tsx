@@ -34,7 +34,7 @@ export default function DashboardOverview() {
   const fetchDashboardData = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       console.log('Fetching dashboard data...');
       const response = await fetch('/api/dashboard/stats', {
@@ -46,7 +46,7 @@ export default function DashboardOverview() {
       });
 
       console.log('Response status:', response.status);
-      
+
       if (!response.ok) {
         if (response.status === 401) {
           setError('Authentication failed. Please log in again.');
@@ -64,7 +64,7 @@ export default function DashboardOverview() {
 
       const data = await response.json();
       console.log('Dashboard data received:', data);
-      
+
       // Validate data structure
       if (!data.stats) {
         setError('Invalid data format received from server.');
@@ -144,7 +144,7 @@ export default function DashboardOverview() {
         <div className="animate-pulse space-y-6">
           <div className="flex items-center gap-3 mb-6">
             <RefreshCw className="w-5 h-5 animate-spin" />
-            <span className="text-gray-600">Loading dashboard data...</span>
+            <span className="text-xs text-gray-600">Loading dashboard data...</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (
@@ -162,22 +162,22 @@ export default function DashboardOverview() {
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
           <div className="flex items-center gap-3 mb-4">
             <AlertCircle className="w-6 h-6 text-red-600" />
-            <h3 className="text-lg font-semibold text-red-800">Error Loading Dashboard</h3>
+            <h3 className="text-xl font-semibold text-red-800">Error Loading Dashboard</h3>
           </div>
-          <p className="text-red-700 mb-4">{error}</p>
+          <p className="text-xs text-red-700 mb-4">{error}</p>
           <div className="flex gap-3">
             <button
               onClick={fetchDashboardData}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 text-xs"
             >
               <RefreshCw className="w-4 h-4" />
               Retry
             </button>
             <button
               onClick={useMockData}
-              className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+              className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-xs"
             >
-              Use Demo Data
+              Use Mock Data
             </button>
           </div>
         </div>
@@ -188,7 +188,7 @@ export default function DashboardOverview() {
   if (!dashboardData) {
     return (
       <div className="p-6">
-        <div className="text-center text-gray-500">
+        <div className="text-center text-xs text-gray-500">
           No data available. Please try refreshing or contact support.
         </div>
       </div>
@@ -202,12 +202,12 @@ export default function DashboardOverview() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
-          <p className="text-gray-600">Monitor your property portfolio and risk exposure</p>
+          <h1 className="text-xl font-bold text-gray-900">Dashboard Overview</h1>
+          <p className="text-xs text-gray-600">Monitor your property portfolio and risk exposure</p>
         </div>
         <button
           onClick={fetchDashboardData}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 text-xs"
           disabled={loading}
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -221,8 +221,8 @@ export default function DashboardOverview() {
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Properties</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.total_properties}</p>
+              <p className="text-xs font-medium text-gray-600">Total Properties</p>
+              <p className="text-xl font-bold text-gray-900">{stats.total_properties}</p>
             </div>
             <div className="p-3 bg-blue-50 rounded-lg">
               <MapPin className="w-6 h-6 text-blue-600" />
@@ -234,8 +234,8 @@ export default function DashboardOverview() {
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Average Risk Score</p>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-xs font-medium text-gray-600">Average Risk Score</p>
+              <p className="text-xl font-bold text-gray-900">
                 {Math.round(stats.average_risk_score || 0)}
               </p>
               <p className={`text-xs font-medium px-2 py-1 rounded-full inline-block mt-1 ${getRiskColor(stats.average_risk_score || 0)}`}>
@@ -252,10 +252,10 @@ export default function DashboardOverview() {
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">High Risk Properties</p>
-              <p className="text-2xl font-bold text-red-600">{stats.high_risk_count}</p>
+              <p className="text-xs font-medium text-gray-600">High Risk Properties</p>
+              <p className="text-xl font-bold text-red-600">{stats.high_risk_count}</p>
               <p className="text-xs text-gray-500">
-                {stats.total_properties > 0 
+                {stats.total_properties > 0
                   ? `${Math.round((stats.high_risk_count / stats.total_properties) * 100)}% of portfolio`
                   : '0% of portfolio'
                 }
@@ -271,8 +271,8 @@ export default function DashboardOverview() {
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Portfolio Value</p>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-xs font-medium text-gray-600">Portfolio Value</p>
+              <p className="text-xl font-bold text-gray-900">
                 {formatCurrency(stats.total_estimated_value || 0)}
               </p>
             </div>
@@ -287,22 +287,22 @@ export default function DashboardOverview() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Risk Distribution */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Risk Distribution</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">Risk Distribution</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                <span className="text-sm font-medium">Low Risk (0-40)</span>
+                <span className="text-xs font-medium">Low Risk (0-40)</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">{stats.low_risk_count} properties</span>
+                <span className="text-xs text-gray-600">{stats.low_risk_count} properties</span>
                 <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-green-500 transition-all duration-300"
-                    style={{ 
-                      width: stats.total_properties > 0 
-                        ? `${(stats.low_risk_count / stats.total_properties) * 100}%` 
-                        : '0%' 
+                    style={{
+                      width: stats.total_properties > 0
+                        ? `${(stats.low_risk_count / stats.total_properties) * 100}%`
+                        : '0%'
                     }}
                   ></div>
                 </div>
@@ -312,17 +312,17 @@ export default function DashboardOverview() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
-                <span className="text-sm font-medium">Medium Risk (41-70)</span>
+                <span className="text-xs font-medium">Medium Risk (41-70)</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">{stats.medium_risk_count} properties</span>
+                <span className="text-xs text-gray-600">{stats.medium_risk_count} properties</span>
                 <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-yellow-500 transition-all duration-300"
-                    style={{ 
-                      width: stats.total_properties > 0 
-                        ? `${(stats.medium_risk_count / stats.total_properties) * 100}%` 
-                        : '0%' 
+                    style={{
+                      width: stats.total_properties > 0
+                        ? `${(stats.medium_risk_count / stats.total_properties) * 100}%`
+                        : '0%'
                     }}
                   ></div>
                 </div>
@@ -332,17 +332,17 @@ export default function DashboardOverview() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                <span className="text-sm font-medium">High Risk (71-100)</span>
+                <span className="text-xs font-medium">High Risk (71-100)</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">{stats.high_risk_count} properties</span>
+                <span className="text-xs text-gray-600">{stats.high_risk_count} properties</span>
                 <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-red-500 transition-all duration-300"
-                    style={{ 
-                      width: stats.total_properties > 0 
-                        ? `${(stats.high_risk_count / stats.total_properties) * 100}%` 
-                        : '0%' 
+                    style={{
+                      width: stats.total_properties > 0
+                        ? `${(stats.high_risk_count / stats.total_properties) * 100}%`
+                        : '0%'
                     }}
                   ></div>
                 </div>
@@ -355,15 +355,15 @@ export default function DashboardOverview() {
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center gap-2 mb-4">
             <Activity className="w-5 h-5 text-gray-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Recent Properties</h3>
+            <h3 className="text-xl font-semibold text-gray-900">Recent Properties</h3>
           </div>
-          
+
           {recent_activity.length > 0 ? (
             <div className="space-y-3">
               {recent_activity.map((activity, index) => (
                 <div key={index} className="flex items-center justify-between py-3 border-b last:border-b-0">
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-xs font-medium text-gray-900 truncate">
                       {activity.address}
                     </p>
                     <p className="text-xs text-gray-500">
@@ -379,7 +379,7 @@ export default function DashboardOverview() {
           ) : (
             <div className="text-center text-gray-500 py-8">
               <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-sm">No properties added yet</p>
+              <p className="text-xs">No properties added yet</p>
               <p className="text-xs text-gray-400">Start by adding properties on the map</p>
             </div>
           )}
@@ -388,7 +388,7 @@ export default function DashboardOverview() {
 
       {/* Quick Actions */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <a
             href="/dashboard/map"
@@ -399,7 +399,7 @@ export default function DashboardOverview() {
             </div>
             <div>
               <p className="font-medium text-gray-900">Add Properties</p>
-              <p className="text-sm text-gray-600">Click on map to add new properties</p>
+              <p className="text-xs text-gray-600">Click on map to add new properties</p>
             </div>
           </a>
 
@@ -412,7 +412,7 @@ export default function DashboardOverview() {
             </div>
             <div>
               <p className="font-medium text-gray-900">Review High Risk</p>
-              <p className="text-sm text-gray-600">Check properties needing attention</p>
+              <p className="text-xs text-gray-600">Check properties needing attention</p>
             </div>
           </a>
 
@@ -425,7 +425,7 @@ export default function DashboardOverview() {
             </div>
             <div>
               <p className="font-medium text-gray-900">View Analytics</p>
-              <p className="text-sm text-gray-600">Detailed portfolio insights</p>
+              <p className="text-xs text-gray-600">Detailed portfolio insights</p>
             </div>
           </a>
         </div>

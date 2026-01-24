@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validation";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { createJWT } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
@@ -40,11 +40,12 @@ export async function POST(req: Request) {
     }
 
     // ✅ Generate JWT (store only non-sensitive fields)
-    const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET!, // 👈 make sure this exists in .env
-      { expiresIn: "7d" }
-    );
+    const token = await createJWT({
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      fullName: user.fullName
+    });
 
     // ✅ Return token as HTTP-only cookie
     const response = NextResponse.json(
@@ -60,7 +61,7 @@ export async function POST(req: Request) {
       { status: 200 }
     );
 
-    response.cookies.set("token", token, {
+    response.cookies.set("insurmap_session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

@@ -29,6 +29,13 @@ enum UserRole {
   VIEWER
 }
 
+enum ContactStatus {
+  PENDING
+  RESPONDED
+  CLOSED
+  SPAM
+}
+
 model Company {
   id           String              @id @default(cuid())
   name         String
@@ -122,4 +129,18 @@ model AuthAttempt {
   user User? @relation(fields: [userId], references: [id])
 
   @@map("auth_attempts")
+}
+
+model ContactSubmission {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  interest  String?
+  message   String
+  status    ContactStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("contact_submissions")
 }

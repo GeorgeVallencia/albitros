@@ -14,6 +14,7 @@ type Session = {
   sub: string;          // user id
   email: string;
   role: string;
+  fullName?: string;
 };
 
 export async function createJWT(session: Session) {
