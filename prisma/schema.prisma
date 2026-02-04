@@ -9,6 +9,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum FraudType {
+  UPDATING
+  UNBUNDLING
+  PHANTOM_BILLING
+  DUPLICATE_CLAIM
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ClaimStatus {
+  PENDING
+  APPROVED
+  FLAGGED_FOR_FRAUD
+  REJECTED
+}
+
+enum BatchJobStatus {
+  PROCESSING
+  COMPLETED
+  COMPLETED_WITH_ERRORS
+  FAILED
+}
+
 enum CompanySize {
   SMALL
   MEDIUM
@@ -47,6 +75,12 @@ model Company {
   users       User[]
   invitations Invitation[]
   auditLogs   AuditLog[]
+  webhooks    Webhook[]
+  patients    Patient[]
+  providers   Provider[]
+  claims      Claim[]
+  batchJobs   BatchJob[]
+  ssoConfigs  SSOConfig[]
 
   @@map("companies")
 }
@@ -143,4 +177,186 @@ model ContactSubmission {
   updatedAt DateTime      @updatedAt
 
   @@map("contact_submissions")
+}
+
+model Webhook {
+  id           String   @id @default(cuid())
+  url          String
+  events       String[] // JSON array of event types
+  secret       String
+  active       Boolean  @default(true)
+  lastTriggered DateTime?
+  companyId    String
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  company      Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("webhooks")
+}
+
+model Patient {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  mrn       String?  // Medical Record Number
+  email     String?
+  phone     String?
+  dateOfBirth DateTime?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  claims    Claim[]
+
+  @@map("patients")
+}
+
+model Provider {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  npi       String?  // National Provider Identifier
+  email     String?
+  phone     String?
+  specialty String?
+  latitude  Float?
+  longitude Float?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  claims    Claim[]
+
+  @@map("providers")
+}
+
+model Claim {
+  id           String      @id @default(cuid())
+  claimNumber  String      @unique
+  patientId    String
+  providerId   String
+  companyId    String
+  serviceDate  DateTime
+  billedAmount Float
+  riskScore    Float?
+  riskLevel    RiskLevel?
+  fraudTypes   FraudType[]
+  isFlagged    Boolean     @default(false)
+  status       ClaimStatus @default(PENDING)
+  
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  company       Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  patient       Patient         @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  provider      Provider        @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  claimLineItems ClaimLineItem[]
+  fraudAlerts   FraudAlert[]
+
+  @@map("claims")
+}
+
+model ClaimLineItem {
+  id             String  @id @default(cuid())
+  claimId        String
+  procedureCode  String
+  modifier1      String?
+  modifier2      String?
+  modifier3      String?
+  modifier4      String?
+  units          Int
+  unitCost       Float
+  totalCost      Float
+  diagnosisCode1 String?
+  diagnosisCode2 String?
+  diagnosisCode3 String?
+  diagnosisCode4 String?
+  isUnbundled    Boolean @default(false)
+  isUpcoded      Boolean @default(false)
+  riskScore      Float?
+  
+  claim Claim @relation(fields: [claimId], references: [id], onDelete: Cascade)
+
+  @@map("claim_line_items")
+}
+
+model FraudAlert {
+  id              String     @id @default(cuid())
+  claimId         String
+  providerId      String
+  alertType       FraudType
+  severity        RiskLevel
+  confidence      Int
+  description     String
+  details         Json?      // Additional alert details
+  detectionModel  String     @default("ClaimProcessor-v1")
+  isResolved      Boolean    @default(false)
+  
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  claim    Claim    @relation(fields: [claimId], references: [id], onDelete: Cascade)
+
+  @@map("fraud_alerts")
+}
+
+model BatchJob {
+  id              String         @id @default(cuid())
+  companyId       String
+  totalClaims     Int
+  processedClaims Int            @default(0)
+  successCount    Int            @default(0)
+  errorCount      Int            @default(0)
+  status          BatchJobStatus @default(PROCESSING)
+  options         Json?          // Processing options
+  errors          Json?          // Error details
+  startedAt       DateTime?
+  completedAt     DateTime?
+  
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  company         Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  claimResults    BatchClaimResult[]
+
+  @@map("batch_jobs")
+}
+
+model BatchClaimResult {
+  id            String   @id @default(cuid())
+  batchJobId    String
+  claimId       String
+  status        String   // SUCCESS, ERROR
+  riskScore     Float?
+  approved      Boolean?
+  errorMessage   String?
+  processingTime Int     // Processing time in milliseconds
+  
+  createdAt     DateTime @default(now())
+
+  batchJob      BatchJob @relation(fields: [batchJobId], references: [id], onDelete: Cascade)
+
+  @@map("batch_claim_results")
+}
+
+model SSOConfig {
+  id        String   @id @default(cuid())
+  companyId String
+  provider  String   // SAML, OIDC, AZURE_AD, OKTA
+  config    Json     // Provider-specific configuration
+  mappings  Json     // Field mappings for user data
+  isActive  Boolean  @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("sso_configs")
 }

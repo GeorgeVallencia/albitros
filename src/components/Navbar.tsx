@@ -63,26 +63,52 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden md:flex items-center space-x-6">
           {loading ? (
             <div className="w-20 h-8 bg-gray-200 animate-pulse rounded"></div>
           ) : user ? (
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-6">
+              {/* Navigation links for logged-in users */}
+              <div className="flex items-center space-x-6">
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-medium text-gray-700 hover:text-black transition px-3 py-2 rounded-lg hover:bg-gray-100"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/analytics"
+                  className="text-sm font-medium text-gray-700 hover:text-black transition px-3 py-2 rounded-lg hover:bg-gray-100"
+                >
+                  Analytics
+                </Link>
+                <Link
+                  href="/docs"
+                  className="text-sm font-medium text-gray-700 hover:text-black transition px-3 py-2 rounded-lg hover:bg-gray-100"
+                >
+                  API Docs
+                </Link>
+              </div>
+
+              {/* Visual separator */}
+              <div className="h-8 w-px bg-gray-300"></div>
+
+              {/* User info and logout */}
+              <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
                 </div>
                 <span className="text-sm font-medium text-gray-700">
                   {getGreeting()}, {user.fullName}
                 </span>
+                <button
+                  onClick={handleLogout}
+                  className="text-sm font-medium text-red-600 hover:text-red-700 transition flex items-center space-x-1 px-3 py-2 rounded-lg hover:bg-red-50"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Logout</span>
+                </button>
               </div>
-              <button
-                onClick={handleLogout}
-                className="text-sm font-medium text-gray-700 hover:text-black transition flex items-center space-x-1"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Logout</span>
-              </button>
             </div>
           ) : (
             <>
@@ -123,6 +149,18 @@ export default function Navbar() {
                 ROI Calculator
               </Link>
               <Link
+                href="/docs"
+                className="text-sm font-medium text-gray-700 hover:text-black transition"
+              >
+                API Docs
+              </Link>
+              <Link
+                href="/analytics"
+                className="text-sm font-medium text-gray-700 hover:text-black transition"
+              >
+                Analytics
+              </Link>
+              <Link
                 href="/login"
                 className="text-sm font-medium text-gray-700 hover:text-black transition"
               >
@@ -136,12 +174,6 @@ export default function Navbar() {
               </Link>
             </>
           )}
-          <Link
-            href="/roi"
-            className="text-sm font-medium text-gray-700 hover:text-black transition"
-          >
-            ROI Calculator
-          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -157,144 +189,135 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {mobileOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 px-6 py-6 space-y-5">
-          <Link
-            href="/#problem"
-            className="block text-base font-medium text-black hover:text-gray-700"
-            onClick={() => setMobileOpen(false)}
-          >
-            Problem
-          </Link>
-          <Link
-            href="/#why"
-            className="block text-base font-medium text-black hover:text-gray-700"
-            onClick={() => setMobileOpen(false)}
-          >
-            Why Albitros
-          </Link>
-          <Link
-            href="/how-it-works"
-            className="block text-base font-medium text-black hover:text-gray-700"
-            onClick={() => setMobileOpen(false)}
-          >
-            How It Works
-          </Link>
-          <Link
-            href="/#case-studies"
-            className="block text-base font-medium text-black hover:text-gray-700"
-            onClick={() => setMobileOpen(false)}
-          >
-            Results
-          </Link>
-          <Link
-            href="/faq"
-            className="block text-base font-medium text-black hover:text-gray-700"
-            onClick={() => setMobileOpen(false)}
-          >
-            FAQ
-          </Link>
-          <Link
-            href="/roi"
-            className="block text-base font-medium text-black hover:text-gray-700"
-            onClick={() => setMobileOpen(false)}
-          >
-            ROI Calculator
-          </Link>
+          {loading ? (
+            <div className="w-20 h-8 bg-gray-200 animate-pulse rounded"></div>
+          ) : user ? (
+            // Mobile menu for logged-in users
+            <>
+              <Link
+                href="/dashboard"
+                className="block text-base font-medium text-black hover:text-gray-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/analytics"
+                className="block text-base font-medium text-black hover:text-gray-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                Analytics
+              </Link>
+              <Link
+                href="/docs"
+                className="block text-base font-medium text-black hover:text-gray-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                API Docs
+              </Link>
 
-          <div className="pt-4 border-t border-gray-200 space-y-4">
-            <Link
-              href="/#problem"
-              className="block text-base font-medium text-black hover:text-gray-700"
-              onClick={() => setMobileOpen(false)}
-            >
-              Problem
-            </Link>
-            <Link
-              href="/#why"
-              className="block text-base font-medium text-black hover:text-gray-700"
-              onClick={() => setMobileOpen(false)}
-            >
-              Why Albitros
-            </Link>
-            <Link
-              href="/how-it-works"
-              className="block text-base font-medium text-black hover:text-gray-700"
-              onClick={() => setMobileOpen(false)}
-            >
-              How It Works
-            </Link>
-            <Link
-              href="/#case-studies"
-              className="block text-base font-medium text-black hover:text-gray-700"
-              onClick={() => setMobileOpen(false)}
-            >
-              Results
-            </Link>
-            <Link
-              href="/faq"
-              className="block text-base font-medium text-black hover:text-gray-700"
-              onClick={() => setMobileOpen(false)}
-            >
-              FAQ
-            </Link>
-            <Link
-              href="/roi"
-              className="block text-base font-medium text-black hover:text-gray-700"
-              onClick={() => setMobileOpen(false)}
-            >
-              ROI Calculator
-            </Link>
-
-            <div className="pt-4 border-t border-gray-200 space-y-4">
-              {loading ? (
-                <div className="w-20 h-8 bg-gray-200 animate-pulse rounded"></div>
-              ) : user ? (
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-2 pb-4 border-b border-gray-200">
-                    <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {getGreeting()}, {user.fullName}
-                      </div>
-                      <div className="text-xs text-gray-500">{user.email}</div>
-                    </div>
+              <div className="pt-4 border-t border-gray-200 space-y-4">
+                <div className="flex items-center space-x-2 pb-4 border-b border-gray-200">
+                  <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-white" />
                   </div>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center space-x-2 text-base font-medium text-gray-700 hover:text-black w-full"
-                  >
-                    <LogOut className="w-4 h-4 cursor-pointer" />
-                    <span>Logout</span>
-                  </button>
-                  <Link
-                    href="/roi"
-                    className="block text-base font-medium text-black hover:text-gray-700"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    ROI Calculator
-                  </Link>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">
+                      {getGreeting()}, {user.fullName}
+                    </p>
+                    <p className="text-xs text-gray-500">{user.email}</p>
+                  </div>
                 </div>
-              ) : (
-                <div>
-                  <Link
-                    href="/login"
-                    className="block text-base font-medium text-black hover:text-gray-700"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    href="/signup"
-                    className="block text-base font-medium text-black hover:text-gray-700"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    Sign Up
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setMobileOpen(false);
+                  }}
+                  className="w-full text-left text-base font-medium text-red-600 hover:text-red-700 flex items-center space-x-2"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Logout</span>
+                </button>
+              </div>
+            </>
+          ) : (
+            // Mobile menu for logged-out users
+            <>
+              <Link
+                href="/#problem"
+                className="block text-base font-medium text-black hover:text-gray-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                Problem
+              </Link>
+              <Link
+                href="/#why"
+                className="block text-base font-medium text-black hover:text-gray-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                Why Albitros
+              </Link>
+              <Link
+                href="/how-it-works"
+                className="block text-base font-medium text-black hover:text-gray-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                How It Works
+              </Link>
+              <Link
+                href="/#case-studies"
+                className="block text-base font-medium text-black hover:text-gray-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                Results
+              </Link>
+              <Link
+                href="/faq"
+                className="block text-base font-medium text-black hover:text-gray-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                FAQ
+              </Link>
+              <Link
+                href="/roi"
+                className="block text-base font-medium text-black hover:text-gray-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                ROI Calculator
+              </Link>
+              <Link
+                href="/docs"
+                className="block text-base font-medium text-black hover:text-gray-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                API Docs
+              </Link>
+              <Link
+                href="/analytics"
+                className="block text-base font-medium text-black hover:text-gray-700"
+                onClick={() => setMobileOpen(false)}
+              >
+                Analytics
+              </Link>
+
+              <div className="pt-4 border-t border-gray-200 space-y-4">
+                <Link
+                  href="/login"
+                  className="block text-base font-medium text-black hover:text-gray-700"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="block w-full px-4 py-2.5 border border-gray-300 text-gray-700 text-base font-medium rounded-lg hover:bg-gray-50 transition text-center"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       )}
     </nav>

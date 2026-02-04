@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { BillingCodeValidator, CPT_CODES, FRAUD_PATTERNS } from '@/lib/billing/codes';
 import { FraudType, RiskLevel, ClaimStatus } from '@prisma/client';
+import { WebhookService } from '@/lib/webhooks';
 
 export interface ClaimSubmission {
   patientId: string;
@@ -112,6 +113,20 @@ export class ClaimProcessor {
           })
         )
       );
+
+      // Trigger fraud alert webhooks
+      for (const alert of analysis.alerts) {
+        await WebhookService.triggerFraudAlertEvent(alert, claim);
+      }
+    }
+
+    // Trigger claim status webhook
+    if (analysis.approved) {
+      await WebhookService.triggerClaimEvent(claim, 'claim.approved');
+    } else if (analysis.riskScore > 70) {
+      await WebhookService.triggerClaimEvent(claim, 'claim.flagged');
+    } else {
+      await WebhookService.triggerClaimEvent(claim, 'claim.rejected');
     }
 
     return {

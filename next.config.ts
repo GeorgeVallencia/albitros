@@ -8,15 +8,15 @@ const nextConfig = {
     cpus: 1,
   },
   eslint: {
-      // Disable ESLint during builds
-      ignoreDuringBuilds: true,
-    },
-    typescript: {
-      // Ignore TypeScript errors during builds (use carefully)
-      ignoreBuildErrors: true,
-    },
+    // Disable ESLint during builds for now
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // Ignore TypeScript errors during builds for now
+    ignoreBuildErrors: true,
+  },
   // Optimize webpack bundle
-  webpack: (config, { isServer, dev }) => {
+  webpack: (config: any, { isServer, dev }: { isServer: boolean; dev: boolean }) => {
     // Client-side optimizations
     if (!isServer) {
       config.resolve.fallback = {
@@ -59,7 +59,32 @@ const nextConfig = {
     unoptimized: false,
   },
 
-    
+  // Production optimizations
+  poweredByHeader: false,
+  compress: true,
+
+  // Security headers
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+    ];
+  },
 
   // Reduce memory usage
   onDemandEntries: {

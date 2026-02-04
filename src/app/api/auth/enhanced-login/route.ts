@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { PrismaClient } from '@prisma/client';
 import { authRateLimit } from '@/lib/rate-limit';
 import { withRateLimit } from '@/lib/rate-limit';
 import { createJWT, setSessionCookie } from '@/lib/auth';
@@ -7,13 +7,21 @@ import { loginSchema } from '@/lib/validation';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 
+const prisma = new PrismaClient();
+
 const loginAttemptSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
   rememberMe: z.boolean().optional()
 });
 
-export const POST = withRateLimit(authRateLimit)(async (req: NextRequest) => {
+export async function POST(req: NextRequest) {
+  // Apply rate limiting
+  const rateLimitResult = await authRateLimit(req);
+  if (!rateLimitResult.success && rateLimitResult.response) {
+    return rateLimitResult.response;
+  }
+
   try {
     const body = await req.json();
 
@@ -124,15 +132,8 @@ export const POST = withRateLimit(authRateLimit)(async (req: NextRequest) => {
       }
     });
 
-    // Set session cookie
-    const maxAge = rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60; // 30 days or 1 day
-    response.cookies.set('insurmap_session', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge
-    });
+    // Set session cookie using the proper function
+    await setSessionCookie(token);
 
     // Log successful login
     await logAuthEvent(user.id, 'LOGIN_SUCCESS', {
@@ -149,7 +150,7 @@ export const POST = withRateLimit(authRateLimit)(async (req: NextRequest) => {
       { status: 500 }
     );
   }
-});
+}
 
 async function handleFailedLogin(user: any) {
   const now = new Date();
@@ -213,7 +214,7 @@ async function logAuthEvent(userId: string, event: string, metadata: any) {
       userId,
       action: event,
       resource: 'AUTH',
-      metadata,
+      details: metadata, // Use details instead of metadata
       ipAddress: metadata.ip,
       userAgent: metadata.userAgent
     }

@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validation";
 import bcrypt from "bcryptjs";
-import { createJWT } from "@/lib/auth";
+import { createJWT, setSessionCookie } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
@@ -47,8 +47,10 @@ export async function POST(req: Request) {
       fullName: user.fullName
     });
 
-    // ✅ Return token as HTTP-only cookie
-    const response = NextResponse.json(
+    // Set session cookie using the proper function
+    await setSessionCookie(token);
+
+    return NextResponse.json(
       {
         message: "Login successful",
         user: {
@@ -60,16 +62,6 @@ export async function POST(req: Request) {
       },
       { status: 200 }
     );
-
-    response.cookies.set("insurmap_session", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      path: "/",
-    });
-
-    return response;
   } catch (err: any) {
     console.error("Login error:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

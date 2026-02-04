@@ -35,9 +35,9 @@ export default function FAQPage() {
       <main className="flex-1">
         <section className="py-16 px-6 bg-gray-50 text-center">
           <div className="max-w-4xl mx-auto">
-            <p className="text-sm uppercase tracking-widest font-semibold text-black">FAQ</p>
-            <h1 className="mt-3 text-4xl md:text-5xl font-bold text-gray-900">Answers for risk, compliance, and SIU teams</h1>
-            <p className="mt-4 text-lg text-gray-700">If you don’t see what you need, we’ll cover it live.</p>
+            <p className="text-xs uppercase tracking-widest font-semibold text-black">FAQ</p>
+            <h1 className="mt-3 text-xl font-bold text-gray-900">Answers for risk, compliance, and SIU teams</h1>
+            <p className="mt-4 text-xs text-gray-700">If you don’t see what you need, we’ll cover it live.</p>
           </div>
         </section>
 
@@ -49,7 +49,7 @@ export default function FAQPage() {
                   <span className="text-lg font-semibold text-gray-900">{item.q}</span>
                   <Plus className="w-5 h-5 text-gray-500 group-open:rotate-45 transition-transform" />
                 </summary>
-                <p className="mt-3 text-gray-700 leading-relaxed">{item.a}</p>
+                <p className="mt-3 text-xs text-gray-700 leading-relaxed">{item.a}</p>
               </details>
             ))}
           </div>

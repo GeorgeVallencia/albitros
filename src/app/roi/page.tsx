@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import { useState, useMemo } from "react";
 import Navbar from "@/components/Navbar";
@@ -33,9 +33,9 @@ export default function ROICalculatorPage() {
       <main className="flex-1">
         <section className="py-16 px-6 bg-gray-50 text-center">
           <div className="max-w-4xl mx-auto">
-            <p className="text-sm uppercase tracking-widest font-semibold text-black">ROI Calculator</p>
-            <h1 className="mt-3 text-4xl md:text-5xl font-bold text-gray-900">Estimate savings with Albitros</h1>
-            <p className="mt-4 text-lg text-gray-700">Plug in your claims volume and fraud assumptions to see potential impact. We’ll refine these numbers with your historical data in a pilot.</p>
+            <p className="text-xs uppercase tracking-widest font-semibold text-black">ROI Calculator</p>
+            <h1 className="mt-3 text-xl font-bold text-gray-900">Estimate savings with Albitros</h1>
+            <p className="mt-4 text-xs text-gray-700">Plug in your claims volume and fraud assumptions to see potential impact. We'll refine these numbers with your historical data in a pilot.</p>
           </div>
         </section>
 
@@ -90,7 +90,7 @@ export default function ROICalculatorPage() {
               <Stat label="Ops cost from false positives" value={results.falsePositiveCost} negative />
               <Stat label="Net savings per month" value={results.netSavings} highlight />
               <Stat label="Annualized savings" value={results.annualized} highlight big />
-              <p className="text-sm text-gray-300">Assumptions: 10% of false positive claim value as rework/appeal cost. We refine these with your actual processes.</p>
+              <p className="text-xs text-gray-300">Assumptions: 10% of false positive claim value as rework/appeal cost. We refine these with your actual processes.</p>
               <div className="flex flex-wrap gap-3">
                 <a
                   href="/contact"
@@ -117,8 +117,8 @@ function Stat({ label, value, highlight, negative, big }: { label: string; value
   const formatted = value.toLocaleString(undefined, { maximumFractionDigits: 0 });
   return (
     <div className={`p-4 rounded-xl border ${highlight ? "border-green-400 bg-green-50 text-gray-900" : negative ? "border-red-300 bg-red-50 text-red-900" : "border-gray-800 bg-gray-800/60 text-white"}`}>
-      <p className="text-sm opacity-80">{label}</p>
-      <p className={`mt-1 font-bold ${big ? "text-3xl" : "text-2xl"}`}>
+      <p className="text-xs opacity-80">{label}</p>
+      <p className={`mt-1 font-bold ${big ? "text-xl" : "text-lg"}`}>
         ${formatted}
       </p>
     </div>
@@ -128,7 +128,7 @@ function Stat({ label, value, highlight, negative, big }: { label: string; value
 function InputField({ label, value, prefix, suffix, onChange }: { label: string; value: number; prefix?: string; suffix?: string; onChange: (v: number) => void }) {
   return (
     <label className="block">
-      <span className="text-sm font-medium text-gray-700">{label}</span>
+      <span className="text-xs font-medium text-gray-700">{label}</span>
       <div className="mt-2 flex items-center border rounded-xl bg-white px-3 py-2">
         {prefix && <span className="text-gray-500 mr-2">{prefix}</span>}
         <input

@@ -89,19 +89,19 @@ export function createRateLimit(config: RateLimitConfig) {
 // Predefined rate limiters for different use cases
 export const authRateLimit = createRateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  maxRequests: 5, // 5 attempts per 15 minutes
+  maxRequests: process.env.NODE_ENV === 'production' ? 20 : 1000, // 20 requests per 15min in production
   message: 'Too many login attempts. Please try again in 15 minutes.'
 });
 
 export const generalRateLimit = createRateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  maxRequests: 100, // 100 requests per 15 minutes
+  maxRequests: process.env.NODE_ENV === 'production' ? 1000 : 10000, // 1000 requests per 15min in production
   message: 'Rate limit exceeded. Please slow down your requests.'
 });
 
 export const passwordResetRateLimit = createRateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  maxRequests: 3, // 3 password reset attempts per hour
+  maxRequests: process.env.NODE_ENV === 'production' ? 5 : 1000, // 5 requests per hour in production
   message: 'Too many password reset attempts. Please try again in 1 hour.'
 });
 

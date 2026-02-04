@@ -1,8 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { ClaimProcessor, ClaimSubmission } from '@/lib/claims/processor';
 import { prisma } from '@/lib/prisma';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
+import { createRateLimitMiddleware, setRateLimitHeaders } from '@/lib/rate-limiter';
 
 interface JWTPayload {
   id: string;
@@ -11,8 +12,23 @@ interface JWTPayload {
   companyId: string;
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting
+    const rateLimitMiddleware = createRateLimitMiddleware('standard');
+    const rateLimitResult = await rateLimitMiddleware(request, '/api/claims');
+
+    if (!rateLimitResult || !rateLimitResult.success) {
+      const response = NextResponse.json(
+        { error: rateLimitResult?.error || "Rate limit exceeded" },
+        { status: 429 }
+      );
+      if (rateLimitResult) {
+        setRateLimitHeaders(response, rateLimitResult);
+      }
+      return response;
+    }
+
     // Get token from cookies
     const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value;

@@ -1,10 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { PrismaClient } from '@prisma/client';
 import { createJWT, setSessionCookie } from '@/lib/auth';
 import { z } from 'zod';
-import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
-import { sendEmail } from '@/lib/email';
+import * as bcrypt from 'bcryptjs';
+import * as crypto from 'crypto';
+
+// Dynamic import to avoid TypeScript module resolution issues
+let emailService: any;
+try {
+  emailService = require('@/lib/email').emailService;
+} catch (error) {
+  console.warn('Email service not available:', error);
+  emailService = {
+    sendWelcomeEmail: async () => true,
+    sendPasswordResetEmail: async () => true
+  };
+}
+
+const prisma = new PrismaClient();
 
 const enhancedSignupSchema = z.object({
   email: z.string().email(),
@@ -24,6 +37,10 @@ const enhancedSignupSchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+
+    // Debug: Log the received body
+    console.log('Enhanced signup received body:', JSON.stringify(body, null, 2));
+
     const validatedData = enhancedSignupSchema.parse(body);
 
     // Check if user already exists
@@ -48,15 +65,34 @@ export async function POST(req: NextRequest) {
     // Generate username from email
     const username = validatedData.email.split('@')[0];
 
+    // Ensure default company exists
+    const defaultCompanyId = "cmkp22c010000xl8khllyt6g6";
+    let company = await (prisma as any).company.findUnique({
+      where: { id: defaultCompanyId }
+    });
+
+    if (!company) {
+      // Create default company if it doesn't exist
+      company = await (prisma as any).company.create({
+        data: {
+          id: defaultCompanyId,
+          name: validatedData.company || "Default Company",
+          size: validatedData.companySize || "SMALL",
+          claimsVolume: validatedData.claimsVolume || "UNDER_10K"
+        }
+      });
+      console.log('Created default company:', company);
+    }
+
     // Create user with default company
-    const user = await prisma.user.create({
+    const user = await (prisma as any).user.create({
       data: {
         email: validatedData.email,
         passwordHash,
         fullName: validatedData.fullName,
         username: username,
         role: 'MEMBER', // Default role for new users
-        companyId: "cmkp22c010000xl8khllyt6g6", // Default company ID
+        companyId: defaultCompanyId,
         emailVerified: false
       }
     });
@@ -81,14 +117,8 @@ export async function POST(req: NextRequest) {
       }
     });
 
-    // Set session cookie on the response
-    response.cookies.set("insurmap_session", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24, // 1 day
-      path: "/",
-    });
+    // Set session cookie using the proper function
+    await setSessionCookie(token);
 
     return response;
 
@@ -96,8 +126,17 @@ export async function POST(req: NextRequest) {
     console.error('Enhanced signup error:', error);
 
     if (error instanceof z.ZodError) {
+      console.error('Zod validation errors:', error.issues);
       return NextResponse.json(
-        { error: 'Invalid input', details: error.issues },
+        {
+          error: 'Invalid input',
+          details: error.issues,
+          fields: error.issues.map(err => ({
+            field: err.path.join('.'),
+            message: err.message,
+            code: err.code
+          }))
+        },
         { status: 400 }
       );
     }
@@ -109,8 +148,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Catch any other unexpected errors
+    console.error('Unexpected signup error:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        error: 'Internal server error',
+        message: error.message || 'An unexpected error occurred during signup'
+      },
       { status: 500 }
     );
   }

@@ -3,17 +3,22 @@ import { useState, useEffect } from 'react';
 import { MapPin, TrendingUp, AlertTriangle, Shield, DollarSign, Activity, RefreshCw, AlertCircle } from 'lucide-react';
 
 interface DashboardStats {
-  total_properties: number;
+  total_claims: number;
   high_risk_count: number;
   medium_risk_count: number;
   low_risk_count: number;
   average_risk_score: number;
-  total_estimated_value: number;
+  total_billed_amount: number;
+  fraud_detected_count: number;
+  approved_count: number;
 }
 
 interface RecentActivity {
-  address: string;
+  claim_number: string;
+  patient_name: string;
+  provider_name: string;
   risk_score: number;
+  status: string;
   created_at: string;
 }
 
@@ -89,27 +94,38 @@ export default function DashboardOverview() {
   const useMockData = () => {
     const mockData: DashboardData = {
       stats: {
-        total_properties: 15,
-        high_risk_count: 3,
-        medium_risk_count: 7,
-        low_risk_count: 5,
+        total_claims: 150,
+        high_risk_count: 30,
+        medium_risk_count: 70,
+        low_risk_count: 50,
         average_risk_score: 45,
-        total_estimated_value: 2500000,
+        total_billed_amount: 2500000,
+        fraud_detected_count: 30,
+        approved_count: 95,
       },
       recent_activity: [
         {
-          address: "123 Main St, Nairobi",
+          claim_number: "CLM-001",
+          patient_name: "John Doe",
+          provider_name: "Dr. Smith",
           risk_score: 75,
+          status: "FLAGGED_FOR_FRAUD",
           created_at: new Date().toISOString(),
         },
         {
-          address: "456 Oak Ave, Mombasa",
+          claim_number: "CLM-002",
+          patient_name: "Jane Smith",
+          provider_name: "Dr. Johnson",
           risk_score: 35,
+          status: "APPROVED",
           created_at: new Date(Date.now() - 86400000).toISOString(),
         },
         {
-          address: "789 Pine Rd, Kisumu",
+          claim_number: "CLM-003",
+          patient_name: "Bob Wilson",
+          provider_name: "Dr. Brown",
           risk_score: 60,
+          status: "PENDING",
           created_at: new Date(Date.now() - 172800000).toISOString(),
         },
       ],
@@ -202,8 +218,8 @@ export default function DashboardOverview() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Dashboard Overview</h1>
-          <p className="text-xs text-gray-600">Monitor your property portfolio and risk exposure</p>
+          <h2 className="text-xl font-bold text-gray-900">Claims Overview</h2>
+          <p className="mt-4 text-xs text-gray-700">Monitor your fraud detection performance and claim processing metrics.</p>
         </div>
         <button
           onClick={fetchDashboardData}
@@ -217,15 +233,15 @@ export default function DashboardOverview() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Total Properties */}
+        {/* Total Claims */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-gray-600">Total Properties</p>
-              <p className="text-xl font-bold text-gray-900">{stats.total_properties}</p>
+              <p className="text-xs font-medium text-gray-600">Total Claims</p>
+              <p className="text-xl font-bold text-gray-900">{stats.total_claims}</p>
             </div>
             <div className="p-3 bg-blue-50 rounded-lg">
-              <MapPin className="w-6 h-6 text-blue-600" />
+              <Activity className="w-6 h-6 text-blue-600" />
             </div>
           </div>
         </div>
@@ -248,16 +264,16 @@ export default function DashboardOverview() {
           </div>
         </div>
 
-        {/* High Risk Properties */}
+        {/* High Risk Claims */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-gray-600">High Risk Properties</p>
+              <p className="text-xs font-medium text-gray-600">High Risk Claims</p>
               <p className="text-xl font-bold text-red-600">{stats.high_risk_count}</p>
               <p className="text-xs text-gray-500">
-                {stats.total_properties > 0
-                  ? `${Math.round((stats.high_risk_count / stats.total_properties) * 100)}% of portfolio`
-                  : '0% of portfolio'
+                {stats.total_claims > 0
+                  ? `${Math.round((stats.high_risk_count / stats.total_claims) * 100)}% of claims`
+                  : '0% of claims'
                 }
               </p>
             </div>
@@ -267,13 +283,13 @@ export default function DashboardOverview() {
           </div>
         </div>
 
-        {/* Total Portfolio Value */}
+        {/* Total Billed Amount */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-gray-600">Portfolio Value</p>
+              <p className="text-xs font-medium text-gray-600">Total Billed Amount</p>
               <p className="text-xl font-bold text-gray-900">
-                {formatCurrency(stats.total_estimated_value || 0)}
+                {formatCurrency(stats.total_billed_amount || 0)}
               </p>
             </div>
             <div className="p-3 bg-green-50 rounded-lg">
@@ -295,13 +311,13 @@ export default function DashboardOverview() {
                 <span className="text-xs font-medium">Low Risk (0-40)</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-600">{stats.low_risk_count} properties</span>
+                <span className="text-xs text-gray-600">{stats.low_risk_count} claims</span>
                 <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-green-500 transition-all duration-300"
                     style={{
-                      width: stats.total_properties > 0
-                        ? `${(stats.low_risk_count / stats.total_properties) * 100}%`
+                      width: stats.total_claims > 0
+                        ? `${(stats.low_risk_count / stats.total_claims) * 100}%`
                         : '0%'
                     }}
                   ></div>
@@ -315,13 +331,13 @@ export default function DashboardOverview() {
                 <span className="text-xs font-medium">Medium Risk (41-70)</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-600">{stats.medium_risk_count} properties</span>
+                <span className="text-xs text-gray-600">{stats.medium_risk_count} claims</span>
                 <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-yellow-500 transition-all duration-300"
                     style={{
-                      width: stats.total_properties > 0
-                        ? `${(stats.medium_risk_count / stats.total_properties) * 100}%`
+                      width: stats.total_claims > 0
+                        ? `${(stats.medium_risk_count / stats.total_claims) * 100}%`
                         : '0%'
                     }}
                   ></div>
@@ -335,13 +351,13 @@ export default function DashboardOverview() {
                 <span className="text-xs font-medium">High Risk (71-100)</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-600">{stats.high_risk_count} properties</span>
+                <span className="text-xs text-gray-600">{stats.high_risk_count} claims</span>
                 <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-red-500 transition-all duration-300"
                     style={{
-                      width: stats.total_properties > 0
-                        ? `${(stats.high_risk_count / stats.total_properties) * 100}%`
+                      width: stats.total_claims > 0
+                        ? `${(stats.high_risk_count / stats.total_claims) * 100}%`
                         : '0%'
                     }}
                   ></div>
@@ -355,7 +371,7 @@ export default function DashboardOverview() {
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center gap-2 mb-4">
             <Activity className="w-5 h-5 text-gray-600" />
-            <h3 className="text-xl font-semibold text-gray-900">Recent Properties</h3>
+            <h3 className="text-xl font-semibold text-gray-900">Recent Claims</h3>
           </div>
 
           {recent_activity.length > 0 ? (
@@ -364,23 +380,31 @@ export default function DashboardOverview() {
                 <div key={index} className="flex items-center justify-between py-3 border-b last:border-b-0">
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-gray-900 truncate">
-                      {activity.address}
+                      {activity.claim_number} - {activity.patient_name}
                     </p>
                     <p className="text-xs text-gray-500">
-                      Added {new Date(activity.created_at).toLocaleDateString()}
+                      {activity.provider_name} • {new Date(activity.created_at).toLocaleDateString()}
                     </p>
                   </div>
-                  <div className={`px-2 py-1 rounded-full text-xs font-medium ${getRiskColor(activity.risk_score)}`}>
-                    {activity.risk_score}/100
+                  <div className="flex items-center gap-2">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRiskColor(activity.risk_score)}`}>
+                      {activity.risk_score}/100
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${activity.status === 'APPROVED' ? 'bg-green-100 text-green-800' :
+                      activity.status === 'FLAGGED_FOR_FRAUD' ? 'bg-red-100 text-red-800' :
+                        'bg-yellow-100 text-yellow-800'
+                      }`}>
+                      {activity.status.replace('_', ' ')}
+                    </span>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
             <div className="text-center text-gray-500 py-8">
-              <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-xs">No properties added yet</p>
-              <p className="text-xs text-gray-400">Start by adding properties on the map</p>
+              <Activity className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-xs">No claims processed yet</p>
+              <p className="text-xs text-gray-400">Start by submitting claims for fraud analysis</p>
             </div>
           )}
         </div>

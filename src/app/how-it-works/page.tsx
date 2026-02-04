@@ -32,9 +32,9 @@ export default function HowItWorksPage() {
       <main className="flex-1">
         <section className="py-16 px-6 bg-gray-50">
           <div className="max-w-5xl mx-auto text-center">
-            <p className="text-sm uppercase tracking-widest font-semibold text-black">How It Works</p>
-            <h1 className="mt-3 text-4xl md:text-5xl font-bold text-gray-900">From data to action in four steps</h1>
-            <p className="mt-4 text-lg text-gray-700">
+            <p className="text-xs uppercase tracking-widest font-semibold text-black">How It Works</p>
+            <h1 className="mt-3 text-xl font-bold text-gray-900">From data to action in four steps</h1>
+            <p className="mt-4 text-xs text-gray-700">
               Albitros combines deterministic rules, ML models, and graph analytics to stop fraud pre-pay and recover post-pay—without slowing valid claims.
             </p>
           </div>
@@ -45,8 +45,8 @@ export default function HowItWorksPage() {
             {steps.map((step) => (
               <div key={step.title} className="p-6 border rounded-2xl shadow-sm bg-gray-50">
                 <step.icon className="w-8 h-8 text-black" />
-                <h3 className="mt-4 text-2xl font-semibold text-gray-900">{step.title}</h3>
-                <p className="mt-3 text-gray-700 leading-relaxed">{step.description}</p>
+                <h3 className="mt-4 text-xl font-semibold text-gray-900">{step.title}</h3>
+                <p className="mt-3 text-xs text-gray-700 leading-relaxed">{step.description}</p>
               </div>
             ))}
           </div>
@@ -59,7 +59,7 @@ export default function HowItWorksPage() {
                 <Shield className="w-6 h-6 text-black" />
                 <h3 className="text-xl font-semibold">Controls</h3>
               </div>
-              <ul className="mt-4 space-y-3 text-sm text-gray-700">
+              <ul className="mt-4 space-y-3 text-xs text-gray-700">
                 <li>HIPAA-aligned processing and PHI minimization</li>
                 <li>RBAC, SSO/SAML, MFA, and audit trails</li>
                 <li>Data retention policies with zero-retention options</li>
@@ -71,7 +71,7 @@ export default function HowItWorksPage() {
                 <ClipboardCheck className="w-6 h-6 text-black" />
                 <h3 className="text-xl font-semibold">Integrations</h3>
               </div>
-              <ul className="mt-4 space-y-3 text-sm text-gray-700">
+              <ul className="mt-4 space-y-3 text-xs text-gray-700">
                 <li>EDI 837/835, HL7/FHIR, X12, PDF/DICOM ingest</li>
                 <li>Outbound to SIU case tools, core admin, and CRM</li>
                 <li>Webhook and file-drop options for phased rollout</li>
@@ -83,7 +83,7 @@ export default function HowItWorksPage() {
                 <Workflow className="w-6 h-6 text-black" />
                 <h3 className="text-xl font-semibold">Outcomes</h3>
               </div>
-              <ul className="mt-4 space-y-3 text-sm text-gray-700">
+              <ul className="mt-4 space-y-3 text-xs text-gray-700">
                 <li>High-precision pre-pay holds and denials</li>
                 <li>Investigator-ready evidence packets</li>
                 <li>Continuous lift from feedback and appeals data</li>
@@ -94,8 +94,8 @@ export default function HowItWorksPage() {
 
         <section className="py-16 px-6 bg-white text-center">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900">See it with your data</h2>
-            <p className="mt-4 text-lg text-gray-700">Run a pilot on a sampled claims set and compare decisions, lift, and investigator time saved.</p>
+            <h2 className="text-xl font-bold text-gray-900">See it with your data</h2>
+            <p className="mt-4 text-xs text-gray-700">Run a pilot on a sampled claims set and compare decisions, lift, and investigator time saved.</p>
             <div className="mt-6 flex justify-center gap-4">
               <Link href="/contact" className="px-6 py-3 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition flex items-center gap-2">
                 Book a pilot review

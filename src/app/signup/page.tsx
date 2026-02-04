@@ -15,7 +15,7 @@ export default function SignupPage() {
     fullName: "",
     company: "",
     companySize: "SMALL" as const,
-    claimsVolume: "UNDER_10K" as const,
+    claimsVolume: "BETWEEN_10K_50K" as const,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -34,10 +34,33 @@ export default function SignupPage() {
         body: JSON.stringify(form),
       });
 
-      const data = await res.json();
+      console.log('Signup response status:', res.status);
+      console.log('Signup response headers:', res.headers);
+
+      const responseText = await res.text();
+      console.log('Raw response text:', responseText);
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+        console.log('Parsed response data:', data);
+      } catch (jsonError) {
+        console.error('Failed to parse JSON response:', jsonError);
+        setError(`Server error: Invalid response format. Status: ${res.status}, Response: ${responseText.substring(0, 200)}`);
+        setLoading(false);
+        return;
+      }
 
       if (!res.ok) {
-        setError(data.error || "Signup failed. Please try again.");
+        console.error('Signup error response:', data);
+        if (data.fields) {
+          const fieldErrors = data.fields.map((field: any) =>
+            `${field.field}: ${field.message}`
+          ).join(', ');
+          setError(`Validation failed: ${fieldErrors}`);
+        } else {
+          setError(data.error || "Signup failed. Please try again.");
+        }
         setLoading(false);
         return;
       }
@@ -131,6 +154,32 @@ export default function SignupPage() {
               </div>
 
               <div>
+                <label htmlFor="password" className="block text-xs font-medium text-gray-700">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={form.password}
+                    onChange={handleChange}
+                    placeholder="Min 8 characters"
+                    className="text-black mt-1 block w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl text-xs outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Password must be at least 8 characters long</p>
+              </div>
+
+              <div>
                 <label htmlFor="company" className="block text-xs font-medium text-gray-700">
                   Company
                 </label>
@@ -177,9 +226,10 @@ export default function SignupPage() {
                   className="text-black mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl text-xs outline-none"
                 >
                   <option value="UNDER_10K">Under 10,000 claims</option>
-                  <option value="10K_50K">10,000 - 50,000 claims</option>
-                  <option value="50K_100K">50,000 - 100,000 claims</option>
-                  <option value="OVER_100K">Over 100,000 claims</option>
+                  <option value="BETWEEN_10K_50K">10,000 - 50,000 claims</option>
+                  <option value="BETWEEN_50K_100K">50,000 - 100,000 claims</option>
+                  <option value="BETWEEN_100K_500K">100,000 - 500,000 claims</option>
+                  <option value="OVER_500K">Over 500,000 claims</option>
                 </select>
               </div>
 
